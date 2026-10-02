@@ -98,25 +98,27 @@
 
 ```mermaid
 flowchart RL
-    subgraph ING["מסלול א': בליעה (Ingestion), פעם אחת לכל מסמך"]
-      direction RL
+    Q(["שאלה בעברית חופשית"])
+    subgraph ING["מסלול א': בליעה (Ingestion), פעם אחת"]
+      direction TB
       D1["1. Parsing<br/>חילוץ טקסט מ-Word"] --> D2["2. Chunking<br/>קטעים של כ-900 תווים"]
       D2 --> D3["3. Embedding<br/>Titan v2, 1,024 ממדים"]
       D3 --> D4["4. Indexing<br/>וקטורים + BM25"]
     end
-    Q["שאלה בעברית חופשית"] --> R1
-    D4 -.-> R1
     subgraph QRY["מסלול ב': שאלה (Query), בכל שאלה"]
-      direction RL
+      direction TB
       R1["5. Hybrid Retrieval<br/>Dense + BM25"] --> F["6. RRF Fusion<br/>12 מועמדים"]
       F --> G{"7. Confidence Gate<br/>יש קטע קרוב מספיק?"}
       G -- "כן" --> RR["8. Reranking<br/>Claude Haiku: 12 → 5"]
+      G -- "לא" --> X["'לא מצאתי'<br/>בלי מודל, עלות 0"]
       RR --> P["9. Context Expansion<br/>ההוראה המלאה"]
       P --> A["10. Grounded Generation<br/>Claude Haiku 4.5, temperature 0"]
       A --> V["11. Citation Check<br/>מקורות = רק מה שצוטט"]
     end
-    G -- "לא" --> X["'לא מצאתי במסמכים שברשותי'<br/>בלי קריאה למודל, עלות 0"]
-    V --> UI["ממשק: תשובה + מקורות + 'מה המערכת קראה' + עלות"]
+    UI(["תשובה עם אסמכתא<br/>+ 'מה המערכת קראה' + עלות"])
+    ING -. "האינדקס מוכן" .-> QRY
+    Q --> QRY
+    QRY --> UI
 ```
 
 ### הצנרת, שלב אחר שלב
