@@ -1,0 +1,1688 @@
+{
+ "valid": true,
+ "validity": {
+  "complete": true,
+  "stagesRan": true,
+  "noFailures": true,
+  "noJudgeFailures": true
+ },
+ "at": "2026-10-02T06:33:18.097Z",
+ "resumedFrom": null,
+ "minutes": 4.6,
+ "config": "mode=local  |  embed=bedrock:titan (amazon.titan-embed-text-v2:0 @ us-east-1)  |  llm=bedrock:claude (us.anthropic.claude-haiku-4-5-20251001-v1:0), genRegions:off  |  bucket= @ us-east-1  |  retrieve=topK:5,minScore:0.3/0.5,maxPerDoc:2,hybrid:10,expand:off  |  rank=rerank:12,parentVote:off  |  answer=parentDocs:24000,neighbours:1,style:full,applicability:off,refusalQuotedSources:off,refusalQuoteCheck:off,refusalTopics:off,passageRefs:off,topDocSlack:off,quotedDocSources:off,scopeFirst:off  |  judge=question:off",
+ "collection": "takam",
+ "concurrency": 1,
+ "counters": {
+  "attempted": 36,
+  "answered": 36,
+  "failed": 0,
+  "throttled": 1,
+  "retryMeterRows": 36,
+  "retryRowsWaited": 16,
+  "retryWaitTotalMs": 25281,
+  "retryCountTotal": 32,
+  "retryRejectedTotalMs": 51051,
+  "retryRejectedCalls": 32,
+  "clarified": 0,
+  "judgeFailed": 0,
+  "reranked": 21,
+  "refusedFlagMismatch": 0,
+  "quoteCheckAnswers": 0,
+  "quoteCheckExplains": 0,
+  "quoteCheckFailed": 0,
+  "refusalSourcesUnchecked": 0,
+  "passageRefsRan": 0,
+  "passageRefsCleared": 0,
+  "topDocSlackRan": 0,
+  "topDocSlackUsed": 0,
+  "quotedDocsExpected": 0,
+  "quotedDocsRan": 0,
+  "quotedDocsUsed": 0,
+  "scopeFirstExpected": 0,
+  "scopeFirstRan": 0
+ },
+ "refusedFlagMismatchIds": [],
+ "judgeQuestion": {
+  "modelJudged": 4,
+  "withQuestion": 0,
+  "missedIds": []
+ },
+ "rerankSkipped": {},
+ "failureDetail": [],
+ "metrics": {
+  "answerAccuracy": 0.7272727272727273,
+  "answerAccuracyN": "16/22",
+  "recallAt12": 1,
+  "top1": 0.8636363636363636,
+  "top3": 0.9545454545454546,
+  "mrr": 0.9091,
+  "refusals": "14/14",
+  "refusalsLooseBaselineMethod": "14/14",
+  "firstTokenP50Ms": 5609,
+  "firstTokenP90Ms": 9102,
+  "firstTokenWorkP50Ms": 5096,
+  "firstTokenWorkP90Ms": 7596,
+  "firstTokenNetP50Ms": 2134,
+  "firstTokenNetP90Ms": 4154,
+  "retryRejectedTotalMs": 51051,
+  "retryRejectedCalls": 32,
+  "rowsWaitedBeforeFirstToken": 12,
+  "retryMeterRows": 36,
+  "retryRowsWaited": 16,
+  "retryWaitTotalMs": 25281,
+  "retryWaitByStage": {
+   "answer": {
+    "waitMs": 19247,
+    "retries": 27
+   },
+   "rerank": {
+    "waitMs": 6034,
+    "retries": 5
+   }
+  },
+  "costUSD": 0.7073,
+  "centsPerQuestion": 1.965,
+  "skippedNoFact": 0
+ },
+ "gold": [
+  {
+   "id": "s-01",
+   "q": "מתי מוצר נחשב 'כחול-לבן' במכרזים של הממשלה? כמה מהמחיר שלו צריך להיות ישראלי?",
+   "expect": "7.0.1",
+   "chapter": 7,
+   "fact": "35% לפחות ממחיר ההצעה",
+   "kind": "מספרי",
+   "retrievedCodes": [
+    "7.0.1",
+    "7.1.1",
+    "7.7.1",
+    "7.13.1",
+    "7.4.1",
+    "7.7.2",
+    "7.3.1"
+   ],
+   "rankedCodes": [
+    "7.0.1",
+    "7.1.1",
+    "7.7.1"
+   ],
+   "recallAt12": true,
+   "top1": true,
+   "top3": true,
+   "reranked": true,
+   "refusedAtGate": false,
+   "unverified": [],
+   "sources": [],
+   "verdict": {
+    "factFound": true,
+    "factMethod": "literal",
+    "expectCited": false,
+    "hasUnverified": false,
+    "correct": false,
+    "refused": true,
+    "usage": {
+     "inputTokens": 0,
+     "outputTokens": 0
+    }
+   },
+   "answerText": "לא מצאתי במסמכים שברשותי הגדרה של מוצר \"כחול-לבן\" או דרישה לשיעור מסוים של מחיר ישראלי בהקשר זה.\n\nהמסמכים כן מכילים הגדרה של **\"טובין מתוצרת הארץ\"** (הוראה 7.0.1, סעיף 47):\n\n> \"טובין שיוצרו בישראל או באזור בידי יצרן שהוא אזרח ישראל או תושב קבע בישראל, או תאגיד הרשום בישראל, ובלבד שמחיר המרכיב הישראלי בהם מהווה **35% לפחות ממחיר ההצעה**.\"\n\nאך זו הגדרה של \"טובין מתוצרת הארץ\" ולא \"כחול-לבן\". אם אתה מחפש מידע על מוצרים \"כחול-לבן\" בהקשר מכרזים ממשלתיים, המידע אינו נמצא בקטעים המצורפים.",
+   "firstTokenMs": 3654,
+   "firstTokenWaitMs": 0,
+   "firstTokenRejectedMs": 0,
+   "retryWaitMs": 0,
+   "retryCount": 0,
+   "retryRejectedMs": 0,
+   "retryRejectedCalls": 0,
+   "retryByStage": {},
+   "genRegions": {
+    "us-east-1": 2
+   },
+   "totalMs": 7958,
+   "costUSD": 0.0378
+  },
+  {
+   "id": "s-02",
+   "q": "אנחנו רוצים לקנות מערכת מחשוב בערך ב-8 מיליון ש\"ח. ממי צריך לקבל חוות דעת מקצועית לפני שוועדת המכרזים מאשרת?",
+   "expect": "7.1.1",
+   "chapter": 7,
+   "fact": "ראש מערך הדיגיטל הלאומי",
+   "kind": "מי-מאשר",
+   "retrievedCodes": [
+    "7.1.1",
+    "7.13.1",
+    "7.10.7",
+    "7.4.1",
+    "7.3.1",
+    "7.7.2",
+    "7.3.4"
+   ],
+   "rankedCodes": [
+    "7.1.1",
+    "7.13.1",
+    "7.10.7"
+   ],
+   "recallAt12": true,
+   "top1": true,
+   "top3": true,
+   "reranked": true,
+   "refusedAtGate": false,
+   "unverified": [],
+   "sources": [
+    "7.1.1"
+   ],
+   "verdict": {
+    "factFound": true,
+    "factMethod": "literal",
+    "expectCited": true,
+    "hasUnverified": false,
+    "correct": true,
+    "refused": false,
+    "usage": {
+     "inputTokens": 0,
+     "outputTokens": 0
+    }
+   },
+   "answerText": "על פי הקטעים המצורפים:\n\nבהתאם להוראה 7.1.1, סעיף 2.1.11 (קטע [19]):\n\n**בכל התקשרות בנושא תקשוב, ששוויה עולה על סך 5,000,000 ₪, יש לפנות לראש מערך הדיגיטל הלאומי לקבלת חוות דעת מקצועית, טרם אישור ועדת המכרזים במשרד את מסמכי המכרז או את ההתקשרות.**\n\nמכיוון שהרכישה שלכם היא בערך 8 מיליון שקל, היא עולה על הסף של 5 מיליון שקל, ולכן **עליכם לפנות לראש מערך הדיגיטל הלאומי** לקבלת חוות דעת מקצועית.\n\nבנוסף, על פי סעיף 1.1 באותו קטע, מנהל מנמ\"ר המשרד יעביר למערך הדיגיטל הלאומי בקשה מאושרת תקציבית לקבלת חוות דעתו, בהתאם להנחיות מערך הדיגיטל הלאומי.",
+   "firstTokenMs": 2127,
+   "firstTokenWaitMs": 0,
+   "firstTokenRejectedMs": 0,
+   "retryWaitMs": 0,
+   "retryCount": 0,
+   "retryRejectedMs": 0,
+   "retryRejectedCalls": 0,
+   "retryByStage": {},
+   "genRegions": {
+    "us-east-1": 2
+   },
+   "totalMs": 6476,
+   "costUSD": 0.032184
+  },
+  {
+   "id": "s-03",
+   "q": "ועדת הפטור של המשרד אישרה לנו התקשרות בלי מכרז כי זה מקרה דחוף שחייבים להתחיל בו תוך יומיים כדי למנוע נזק. צריך לחכות כמה ימים אחרי שההחלטה מתפרסמת, או שאפשר לחתום מיד?",
+   "expect": "7.1.1",
+   "chapter": 7,
+   "fact": "תיכנס לתוקף מיד עם פרסומה",
+   "kind": "תהליך",
+   "retrievedCodes": [
+    "7.1.1",
+    "7.7.2",
+    "7.6.1",
+    "7.4.1",
+    "7.7.1",
+    "7.10.7"
+   ],
+   "rankedCodes": [
+    "7.6.1",
+    "7.1.1",
+    "7.7.2"
+   ],
+   "recallAt12": true,
+   "top1": false,
+   "top3": true,
+   "reranked": true,
+   "refusedAtGate": false,
+   "unverified": [],
+   "sources": [
+    "7.6.1",
+    "7.1.1"
+   ],
+   "verdict": {
+    "factFound": false,
+    "factMethod": "model",
+    "expectCited": true,
+    "hasUnverified": false,
+    "correct": false,
+    "refused": false,
+    "judgePrompt": "plain",
+    "usage": {
+     "inputTokens": 746,
+     "outputTokens": 5
+    }
+   },
+   "answerText": "על סמך הקטעים שברשותי, לא מצאתי במסמכים הנחיה מפורשת בנושא זמן ההמתנה לאחר פרסום ההחלטה לפני חתימת ההסכם.\n\nמה שכן מופיע בהוראה 7.6.1:\n\nבסעיף 2.3.2 (קטע [6]), כתוב שוועדת המכרזים רשאית להתנות אישור למתן פטור \"בתנאים, לרבות דרישת פרסום פומבי או פרסום אחר של ההליך לבחירת הספק, ובדבר ניהול משא ומתן במסגרת אותם הליכים.\"\n\nכמו כן, בהוראה 7.1.1 (קטע [33]), בסעיף 2.1 בנושא \"מענה לפניות שנתקבלו בוועדת הפטור\", מופיע שהנחיה כי \"שליחת עותק מההחלטה לפונים השונים תיעשה ככל הניתן בסמוך להחלטת הוועדה, **ובכל מקרה, לפני מועד תחילת ההתקשרות**\" (הדגשה שלי).\n\nזה מצביע על כך שיש דרישה שההחלטה תהיה ידועה לפני תחילת ההתקשרות, אך לא מצאתי סכום ימים ספציפי שצריך לחכות אחרי הפרסום.\n\n**המלצה:** בדוק עם ועדת הפטור או עם היועץ המשפטי של המשרד אם הם קבעו תנאים ספציפיים בהחלטתם.",
+   "firstTokenMs": 2134,
+   "firstTokenWaitMs": 0,
+   "firstTokenRejectedMs": 0,
+   "retryWaitMs": 0,
+   "retryCount": 0,
+   "retryRejectedMs": 0,
+   "retryRejectedCalls": 0,
+   "retryByStage": {},
+   "genRegions": {
+    "us-east-1": 2
+   },
+   "totalMs": 9999,
+   "costUSD": 0.03274
+  },
+  {
+   "id": "s-04",
+   "q": "חברה הריצה אצלנו פיילוט של המוצר שלה במסגרת בדיקת שוק (RFI). המוצר מצוין — אפשר פשוט להאריך את הפיילוט ולהמשיך לעבוד איתה?",
+   "expect": "7.2.3",
+   "chapter": 7,
+   "fact": "לא ניתן לבצע הארכה או הרחבת התקשרות",
+   "kind": "כן/לא",
+   "retrievedCodes": [
+    "7.2.3",
+    "7.1.1",
+    "7.6.1",
+    "7.3.1",
+    "7.7.1",
+    "7.10.7",
+    "7.3.7"
+   ],
+   "rankedCodes": [],
+   "recallAt12": true,
+   "top1": false,
+   "top3": false,
+   "reranked": false,
+   "refusedAtGate": true,
+   "unverified": [],
+   "sources": [],
+   "verdict": {
+    "factFound": false,
+    "factMethod": "literal",
+    "expectCited": false,
+    "hasUnverified": false,
+    "correct": false,
+    "refused": true,
+    "usage": {
+     "inputTokens": 0,
+     "outputTokens": 0
+    }
+   },
+   "answerText": "לא מצאתי במסמכים שברשותי.",
+   "firstTokenMs": null,
+   "firstTokenWaitMs": 0,
+   "firstTokenRejectedMs": 0,
+   "retryWaitMs": 0,
+   "retryCount": 0,
+   "retryRejectedMs": 0,
+   "retryRejectedCalls": 0,
+   "retryByStage": {},
+   "genRegions": {},
+   "totalMs": 422,
+   "costUSD": 0
+  },
+  {
+   "id": "s-05",
+   "q": "אנחנו מזמינים פיתוח של מערכת מידע בכ-6 מיליון ש\"ח. איזה טופס אבטחת מידע וסייבר מצרפים לחוזה עם הספק?",
+   "expect": "7.3.1",
+   "chapter": 7,
+   "fact": "רמה מוגברת",
+   "kind": "איפה-כתוב",
+   "retrievedCodes": [
+    "7.3.1",
+    "7.10.7",
+    "7.3.3",
+    "7.1.1"
+   ],
+   "rankedCodes": [
+    "7.3.1"
+   ],
+   "recallAt12": true,
+   "top1": true,
+   "top3": true,
+   "reranked": true,
+   "refusedAtGate": false,
+   "unverified": [],
+   "sources": [
+    "7.3.1"
+   ],
+   "verdict": {
+    "factFound": true,
+    "factMethod": "literal",
+    "expectCited": true,
+    "hasUnverified": false,
+    "correct": true,
+    "refused": false,
+    "usage": {
+     "inputTokens": 0,
+     "outputTokens": 0
+    }
+   },
+   "answerText": "על סמך הקטעים המצורפים מ(הוראה 7.3.1):\n\nבהתקשרות לפיתוח מערכת מידע בהיקף של 6 מיליון ש\"ח, יש לכלול את **טופס \"אחריות לאבטחת מידע והגנה בסייבר של ספקי הממשלה – רמה מוגברת\"**.\n\n**הנימוק:**\n\nהטבלה בסעיף 3 של נספח ח (הוראה 7.3.1) קובעת כי עבור \"פיתוח, אספקה, תחזוקה או תפעול מערכות מידע בהיקף התקשרות של 4 מיליון ש\"ח ומעלה\" — דרגת הרגישות היא **גבוהה**, וטופס זה הוא הרלוונטי.\n\nמכיוון שהיקף ההתקשרות שלכם (6 מיליון ש\"ח) עולה על סף ה-4 מיליון ש\"ח, יש להשתמש בטופס ברמה המוגברת.\n\nבנוסף, על פי סעיף 4 של נספח ח (הוראה 7.3.1), יש לכלול את הטופס הרלוונטי \"כלשונו, כנספח להסכם ההתקשרות\".",
+   "firstTokenMs": 1924,
+   "firstTokenWaitMs": 0,
+   "firstTokenRejectedMs": 0,
+   "retryWaitMs": 0,
+   "retryCount": 0,
+   "retryRejectedMs": 0,
+   "retryRejectedCalls": 0,
+   "retryByStage": {},
+   "genRegions": {
+    "us-east-1": 2
+   },
+   "totalMs": 7437,
+   "costUSD": 0.022645
+  },
+  {
+   "id": "s-06",
+   "q": "פרסמנו מכרז. כמה זמן לפחות חייבים לתת לספקים עד המועד האחרון להגשת הצעות?",
+   "expect": "7.3.1",
+   "chapter": 7,
+   "fact": "14 ימי עסקים",
+   "kind": "מספרי",
+   "retrievedCodes": [
+    "7.3.1",
+    "7.4.1",
+    "7.7.2",
+    "7.13.1",
+    "7.7.1",
+    "7.1.1"
+   ],
+   "rankedCodes": [
+    "7.3.1",
+    "7.4.1",
+    "7.7.2"
+   ],
+   "recallAt12": true,
+   "top1": true,
+   "top3": true,
+   "reranked": true,
+   "refusedAtGate": false,
+   "unverified": [],
+   "sources": [
+    "7.3.1"
+   ],
+   "verdict": {
+    "factFound": true,
+    "factMethod": "literal",
+    "expectCited": true,
+    "hasUnverified": false,
+    "correct": true,
+    "refused": false,
+    "usage": {
+     "inputTokens": 0,
+     "outputTokens": 0
+    }
+   },
+   "answerText": "על פי הוראה 7.3.1, סעיף 2.2.7.1.1.5:\n\n**המועד האחרון להגשת הצעה יהיה זמן סביר לאחר פרסום מסמכי המכרז באתר האינטרנט ולכל הפחות 14 ימי עסקים ממועד פרסום מסמכי המכרז.**\n\nככל שמתקיימים במסגרת ההליך המכרזי שלבים של שאלות הבהרה וכנס מציעים, יהיה המועד האחרון להגשת הצעות זמן סביר לאחר שלבים אלו.\n\nבנסיבות חריגות, ניתן להותיר פרק זמן קצר מהנזכר לעיל, על פי החלטה מנומקת של ועדת המכרזים.",
+   "firstTokenMs": 2110,
+   "firstTokenWaitMs": 0,
+   "firstTokenRejectedMs": 0,
+   "retryWaitMs": 0,
+   "retryCount": 0,
+   "retryRejectedMs": 0,
+   "retryRejectedCalls": 0,
+   "retryByStage": {},
+   "genRegions": {
+    "us-east-1": 2
+   },
+   "totalMs": 5545,
+   "costUSD": 0.031617
+  },
+  {
+   "id": "s-07",
+   "q": "ספק שזכה אצלנו בחוזה ניקיון — כמה זמן אחרי שהחוזה נגמר הערבות הבנקאית שלו צריכה להישאר בתוקף?",
+   "expect": "7.3.3",
+   "chapter": 7,
+   "fact": "לפחות 90 יום לאחר סיום ההתקשרות",
+   "kind": "מספרי",
+   "retrievedCodes": [
+    "7.3.3",
+    "7.3.7"
+   ],
+   "rankedCodes": [
+    "7.3.3"
+   ],
+   "recallAt12": true,
+   "top1": true,
+   "top3": true,
+   "reranked": true,
+   "refusedAtGate": false,
+   "unverified": [],
+   "sources": [
+    "7.3.3"
+   ],
+   "verdict": {
+    "factFound": true,
+    "factMethod": "literal",
+    "expectCited": true,
+    "hasUnverified": false,
+    "correct": true,
+    "refused": false,
+    "usage": {
+     "inputTokens": 0,
+     "outputTokens": 0
+    }
+   },
+   "answerText": "על פי הוראה 7.3.3, בהתקשרויות בתחומי ניקיון, ערבות הביצוע צריכה להישאר בתוקף **לפחות 90 יום לאחר סיום ההתקשרות**.\n\nזאת כפי שנקבע בסעיף המתייחס לתוקף הערבות בהתקשרויות בתחומי שמירה, ניקיון והסעדה (הוראה 7.3.3).",
+   "firstTokenMs": 1850,
+   "firstTokenWaitMs": 0,
+   "firstTokenRejectedMs": 0,
+   "retryWaitMs": 0,
+   "retryCount": 0,
+   "retryRejectedMs": 0,
+   "retryRejectedCalls": 0,
+   "retryByStage": {},
+   "genRegions": {
+    "us-east-1": 2
+   },
+   "totalMs": 3971,
+   "costUSD": 0.018614
+  },
+  {
+   "id": "s-08",
+   "q": "שמעתי שהיום כל הערבויות לממשלה חייבות להיות דיגיטליות. יש מצב שוועדת המכרזים תקבל ממציע ערבות הצעה רגילה, על נייר?",
+   "expect": "7.3.3",
+   "chapter": 7,
+   "fact": "לאור נסיבות שנכתבו בפרוטוקול",
+   "kind": "כן/לא",
+   "retrievedCodes": [
+    "7.3.3",
+    "7.3.7",
+    "7.3.1",
+    "7.4.1"
+   ],
+   "rankedCodes": [
+    "7.3.3",
+    "7.3.7"
+   ],
+   "recallAt12": true,
+   "top1": true,
+   "top3": true,
+   "reranked": true,
+   "refusedAtGate": false,
+   "unverified": [],
+   "sources": [
+    "7.3.3"
+   ],
+   "verdict": {
+    "factFound": true,
+    "factMethod": "literal",
+    "expectCited": true,
+    "hasUnverified": false,
+    "correct": true,
+    "refused": false,
+    "usage": {
+     "inputTokens": 0,
+     "outputTokens": 0
+    }
+   },
+   "answerText": "# תשובה\n\nבהתאם להוראות המצורפות, **ככלל כן — ערבויות חייבות להיות דיגיטליות**, אך **יש חריגים**.\n\n## הכלל — ערבויות דיגיטליות בלבד\n\n(הוראה 7.3.3, סעיף 1.1):\n> \"ככלל, משרדי הממשלה מחויבים לקבל ערבויות כערבויות דיגיטליות בהתאם לתקן הערבויות הדיגיטליות שפורסם על ידי החשב הכללי\"\n\n## החריג — ערבות על נייר בהחלטת ועדה\n\n(הוראה 7.3.3, סעיף 1.2):\n> \"ועדת המכרזים רשאית לקבוע, לאור נסיבות שנכתבו בפרוטוקול, כי ערבות מכרז תוגש כערבות שאינה ערבות דיגיטלית, בהתאם לנוסח המפורט בטופס, 'כתב ערבות (ללא הצמדה)' או בטופס, 'כתב ערבות (ללא הצמדה) באנגלית'. **אין לבצע שינויים בנוסח ללא קבלת אישור בכתב ממנהל מינהל הרכש הממשלתי.**\"\n\n## סיכום\n\nועדת המכרזים **יכולה** לקבל ערבות הצעה על נייר, אך רק אם:\n1. היא קבעה זאת בהחלטה מנומקת בפרוטוקול\n2. הערבות בנוסח המאושר (הטפסים המפורטים)\n3. לא בוצעו שינויים בנוסח ללא אישור ממנהל מינהל הרכש הממשלתי\n\n(הוראה 7.3.3)",
+   "firstTokenMs": 1927,
+   "firstTokenWaitMs": 0,
+   "firstTokenRejectedMs": 0,
+   "retryWaitMs": 0,
+   "retryCount": 0,
+   "retryRejectedMs": 0,
+   "retryRejectedCalls": 0,
+   "retryByStage": {},
+   "genRegions": {
+    "us-east-1": 2
+   },
+   "totalMs": 8873,
+   "costUSD": 0.026902999999999996
+  },
+  {
+   "id": "s-09",
+   "q": "אנחנו סוגרים עם ספק בלי מכרז, בפטור. מותר לנו לבקש מהמשטרה לבדוק אם יש לו עבר פלילי?",
+   "expect": "7.3.4",
+   "chapter": 7,
+   "fact": "לא תהיה מוסמכת",
+   "kind": "כן/לא",
+   "retrievedCodes": [
+    "7.6.1",
+    "7.3.4",
+    "7.4.1",
+    "7.7.1",
+    "7.3.1",
+    "7.3.3",
+    "7.7.2"
+   ],
+   "rankedCodes": [
+    "7.3.4",
+    "7.6.1"
+   ],
+   "recallAt12": true,
+   "top1": true,
+   "top3": true,
+   "reranked": true,
+   "refusedAtGate": false,
+   "unverified": [],
+   "sources": [],
+   "verdict": {
+    "factFound": true,
+    "factMethod": "literal",
+    "expectCited": false,
+    "hasUnverified": false,
+    "correct": false,
+    "refused": true,
+    "usage": {
+     "inputTokens": 0,
+     "outputTokens": 0
+    }
+   },
+   "answerText": "לא מצאתי במסמכים שברשותי.\n\nהוראה 7.3.4 עוסקת בשקילת מידע פלילי בהליכי רכש, אך היא מתייחסת למכרזים בלבד. בסעיף 1.1 בהוראה זו נאמר כי \"ועדת מכרזים לא תקבע תנאי להשתתפות במכרז, בדבר שקילת מידע פלילי, אלא בהתקיים אחד או יותר מהתנאים הבאים\" — וכל התנאים המפורטים בהוראה זו מתייחסים למכרזים.\n\nבנוסף, בהוראה 7.3.4, סעיף 1 בחלק \"פעולה בניגוד להוראות החוק\", נאמר כי \"ועדת המכרזים לא תהיה מוסמכת על פי חוק המידע הפלילי לדרוש או לשקול מידע פלילי במסגרת התקשרות\" בהתקשרות בפטור ממכרז (סעיף 1.2).\n\nהקטעים שברשותי אינם מכילים הנחיות בדבר שקילת מידע פלילי בהתקשרויות בפטור ממכרז.",
+   "firstTokenMs": 2097,
+   "firstTokenWaitMs": 0,
+   "firstTokenRejectedMs": 0,
+   "retryWaitMs": 0,
+   "retryCount": 0,
+   "retryRejectedMs": 0,
+   "retryRejectedCalls": 0,
+   "retryByStage": {},
+   "genRegions": {
+    "us-east-1": 2
+   },
+   "totalMs": 6816,
+   "costUSD": 0.021767
+  },
+  {
+   "id": "s-10",
+   "q": "דרשנו מהבנק לחלט ערבות דיגיטלית, והסכום שהגיע אלינו שונה בשקל אחד ממה שדרשנו. צריך לברר את הפער מול הבנק?",
+   "expect": "7.3.7",
+   "chapter": 7,
+   "fact": "טולרנס של שקל אחד",
+   "kind": "כן/לא",
+   "retrievedCodes": [
+    "7.3.7",
+    "7.3.3",
+    "7.2.3",
+    "7.0.1"
+   ],
+   "rankedCodes": [
+    "7.3.7",
+    "7.3.3"
+   ],
+   "recallAt12": true,
+   "top1": true,
+   "top3": true,
+   "reranked": true,
+   "refusedAtGate": false,
+   "unverified": [],
+   "sources": [
+    "7.3.7"
+   ],
+   "verdict": {
+    "factFound": true,
+    "factMethod": "literal",
+    "expectCited": true,
+    "hasUnverified": false,
+    "correct": true,
+    "refused": false,
+    "usage": {
+     "inputTokens": 0,
+     "outputTokens": 0
+    }
+   },
+   "answerText": "לא בהכרח. בהתאם להוראה 7.3.7, סעיף 5.5:\n\n\"בהשוואת מצבת הערבויות בהתאם לתקן (באמצעות שירות WS7) ובהתאמת הדרישות לחילוט אל מול התשלומים שהתקבלו בגין חילוט, יוגדר טולרנס של שקל אחד (למעלה או למטה). קרי, הפרש של עד שקל אחד (כולל) לא מחייב בירור.\"\n\nכלומר, הפרש של שקל אחד בדיוק נכנס בטולרנס המוגדר, ולא מחייב בירור מול הבנק.",
+   "firstTokenMs": 2008,
+   "firstTokenWaitMs": 0,
+   "firstTokenRejectedMs": 0,
+   "retryWaitMs": 0,
+   "retryCount": 0,
+   "retryRejectedMs": 0,
+   "retryRejectedCalls": 0,
+   "retryByStage": {},
+   "genRegions": {
+    "us-east-1": 2
+   },
+   "totalMs": 5285,
+   "costUSD": 0.023932000000000002
+  },
+  {
+   "id": "s-11",
+   "q": "המשרד שלנו צריך נוסח מיוחד של ערבות דיגיטלית שלא קיים במאגר התבניות. למי פונים כדי לאשר תבנית משרדית?",
+   "expect": "7.3.7",
+   "chapter": 7,
+   "fact": "חטיבת חשבונאות ודיווח",
+   "kind": "מי-מאשר",
+   "retrievedCodes": [
+    "7.3.7",
+    "7.13.1",
+    "7.3.3",
+    "7.7.2",
+    "7.6.1",
+    "7.10.7",
+    "7.10.3"
+   ],
+   "rankedCodes": [
+    "7.3.7",
+    "7.13.1",
+    "7.3.3"
+   ],
+   "recallAt12": true,
+   "top1": true,
+   "top3": true,
+   "reranked": true,
+   "refusedAtGate": false,
+   "unverified": [],
+   "sources": [
+    "7.3.7"
+   ],
+   "verdict": {
+    "factFound": true,
+    "factMethod": "literal",
+    "expectCited": true,
+    "hasUnverified": false,
+    "correct": true,
+    "refused": false,
+    "usage": {
+     "inputTokens": 0,
+     "outputTokens": 0
+    }
+   },
+   "answerText": "על פי הוראה 7.3.7, סעיף 4.5:\n\n**לצורך יצירת תבנית ייעודית של ערבות דיגיטלית ברמת המשרד או ברמת התהליך במאגר התבניות, יש לפנות לסגן בכיר לחשב הכללי האחראי על חטיבת חשבונאות ודיווח, לצורך קבלת אישורו.**\n\nכמו כן, על פי סעיף 4.6 באותה הוראה, בעת יצירת תבנית ייעודית יש לוודא כי האמור בתבנית אינו סותר את הוראות התקן (נספח ב להוראה 7.3.7), וכל סתירה בין תבנית הערבות לבין הוראות התקן — תגבורנה הוראות התקן.",
+   "firstTokenMs": 5609,
+   "firstTokenWaitMs": 513,
+   "firstTokenRejectedMs": 1838,
+   "retryWaitMs": 513,
+   "retryCount": 1,
+   "retryRejectedMs": 1838,
+   "retryRejectedCalls": 1,
+   "retryByStage": {
+    "answer": {
+     "waitMs": 513,
+     "retries": 1,
+     "rejectedMs": 1838,
+     "rejectedCalls": 1
+    }
+   },
+   "genRegions": {
+    "us-east-1": 3
+   },
+   "totalMs": 9241,
+   "costUSD": 0.022073
+  },
+  {
+   "id": "s-12",
+   "q": "כמה אנשים לפחות צריכים להיות נוכחים כשפותחים את תיבת ההצעות של מכרז?",
+   "expect": "7.4.1",
+   "chapter": 7,
+   "fact": "לכל הפחות 3 מבין הבאים",
+   "kind": "מספרי",
+   "retrievedCodes": [
+    "7.3.1",
+    "7.4.1",
+    "7.0.1",
+    "7.13.1",
+    "7.7.1",
+    "7.3.7"
+   ],
+   "rankedCodes": [
+    "7.4.1",
+    "7.3.1"
+   ],
+   "recallAt12": true,
+   "top1": true,
+   "top3": true,
+   "reranked": true,
+   "refusedAtGate": false,
+   "unverified": [],
+   "sources": [
+    "7.4.1"
+   ],
+   "verdict": {
+    "factFound": true,
+    "factMethod": "model",
+    "expectCited": true,
+    "hasUnverified": false,
+    "correct": true,
+    "refused": false,
+    "judgePrompt": "plain",
+    "usage": {
+     "inputTokens": 446,
+     "outputTokens": 5
+    }
+   },
+   "answerText": "על פי הוראה 7.4.1, סעיף 4.1 (פתיחת תיבת המכרזים):\n\n**לפחות 3 אנשים** צריכים להיות נוכחים בעת פתיחת תיבת המכרזים.\n\nהנוכחים חייבים להיות מ**לפחות 3 מבין הבאים, או כל שילוב ביניהם:**\n- חברי ועדת המכרזים\n- כשירים לפתיחת תיבה, שמונו על ידי מנכ\"ל המשרד לפי תקנה 19(ב) או על ידי החשב הכללי לפי תקנה 10א(ט)\n\n(הוראה 7.4.1, סעיף 4.1)",
+   "firstTokenMs": 8372,
+   "firstTokenWaitMs": 1517,
+   "firstTokenRejectedMs": 2556,
+   "retryWaitMs": 1517,
+   "retryCount": 2,
+   "retryRejectedMs": 2556,
+   "retryRejectedCalls": 2,
+   "retryByStage": {
+    "answer": {
+     "waitMs": 1517,
+     "retries": 2,
+     "rejectedMs": 2556,
+     "rejectedCalls": 2
+    }
+   },
+   "genRegions": {
+    "us-east-1": 4
+   },
+   "totalMs": 10596,
+   "costUSD": 0.028568
+  },
+  {
+   "id": "s-13",
+   "q": "בבדיקת ההצעות נראה ששני מציעים תיאמו מחירים ביניהם. חוץ מלפסול אותם, צריך לדווח על זה למישהו?",
+   "expect": "7.4.1",
+   "chapter": 7,
+   "fact": "לדווח לרשות התחרות",
+   "kind": "תהליך",
+   "retrievedCodes": [
+    "7.4.1",
+    "7.7.2",
+    "7.3.1",
+    "7.13.1",
+    "7.0.1",
+    "7.7.1",
+    "7.6.1",
+    "7.3.4"
+   ],
+   "rankedCodes": [
+    "7.4.1",
+    "7.7.2",
+    "7.3.1"
+   ],
+   "recallAt12": true,
+   "top1": true,
+   "top3": true,
+   "reranked": true,
+   "refusedAtGate": false,
+   "unverified": [],
+   "sources": [
+    "7.4.1"
+   ],
+   "verdict": {
+    "factFound": true,
+    "factMethod": "literal",
+    "expectCited": true,
+    "hasUnverified": false,
+    "correct": true,
+    "refused": false,
+    "usage": {
+     "inputTokens": 0,
+     "outputTokens": 0
+    }
+   },
+   "answerText": "# דיווח על חשד לתיאום הצעות\n\nכן, יש חובה לדווח על כך.\n\nעל פי (הוראה 7.4.1), סעיף 6.4.1.2:\n\n> \"חשד לתיאום הצעות – כאשר קיים חשד מבוסס לתיאום בין מציע למציעים אחרים במכרז או בין מציע למציעים פוטנציאליים במכרז. **במקרים כאמור, יש לדווח לרשות התחרות על פסילת הצעות מסיבה זו, לדואר אלקטרוני: michrazim@competition.gov.il.**\"\n\nכלומר:\n1. **ועדת המכרזים תפסול את שתי ההצעות** (או יותר, אם יש חשד לתיאום נוסף)\n2. **חובה לדווח לרשות התחרות** בדואר האלקטרוני המצוין, עם פרטי פסילת ההצעות מסיבה זו",
+   "firstTokenMs": 13297,
+   "firstTokenWaitMs": 3525,
+   "firstTokenRejectedMs": 5236,
+   "retryWaitMs": 3525,
+   "retryCount": 3,
+   "retryRejectedMs": 5236,
+   "retryRejectedCalls": 3,
+   "retryByStage": {
+    "rerank": {
+     "waitMs": 3011,
+     "retries": 2,
+     "rejectedMs": 3420,
+     "rejectedCalls": 2
+    },
+    "answer": {
+     "waitMs": 514,
+     "retries": 1,
+     "rejectedMs": 1816,
+     "rejectedCalls": 1
+    }
+   },
+   "genRegions": {
+    "us-east-1": 5
+   },
+   "totalMs": 17229,
+   "costUSD": 0.034831
+  },
+  {
+   "id": "s-14",
+   "q": "בגלל המלחמה אנחנו צריכים להתקשר בלי מכרז לשירותי שיקום לנפגעי פעולות איבה. מאיזה סכום התקשרות כזאת צריכה אישור של ועדת הפטור באוצר?",
+   "expect": "7.6.1",
+   "chapter": 7,
+   "fact": "6 מיליון ₪",
+   "kind": "מספרי",
+   "retrievedCodes": [
+    "7.6.1",
+    "7.7.1",
+    "7.4.1",
+    "7.7.2"
+   ],
+   "rankedCodes": [
+    "7.6.1",
+    "7.7.1"
+   ],
+   "recallAt12": true,
+   "top1": true,
+   "top3": true,
+   "reranked": true,
+   "refusedAtGate": false,
+   "unverified": [],
+   "sources": [
+    "7.6.1"
+   ],
+   "verdict": {
+    "factFound": true,
+    "factMethod": "literal",
+    "expectCited": true,
+    "hasUnverified": false,
+    "correct": true,
+    "refused": false,
+    "usage": {
+     "inputTokens": 0,
+     "outputTokens": 0
+    }
+   },
+   "answerText": "על סמך הקטעים שברשותי, התשובה תלויה בתאריך ההתקשרות:\n\n## עד ל-31 בדצמבר 2023\n\nהתקשרות לטיפול, שיקום או סיוע הנצרכים כתוצאה מפעולות איבה או פעולות מלחמה (חרבות ברזל) בסכום **העולה על 4 מיליון ₪** טעונה אישור של ועדת הפטור במשרד האוצר (הוראה 7.6.1, סעיף 3.2).\n\n## מ-1 בינואר 2024 ואילך\n\nהתקשרות כזאת בסכום **העולה על 6 מיליון ₪** טעונה אישור של ועדת הפטור במשרד האוצר (הוראה 7.6.1, סעיף 3.2).\n\nהקטעים מציינים כי \"בכל תקנת פטור בה כתוב כי נדרש אישור של ועדת הפטור במשרד האוצר בסכום העולה על 4 מיליון ₪, לעניין התקשרויות לצורך טיפול, שיקום או סיוע, הנצרכים כתוצאה מפעולות האיבה או פעולות המלחמה (חרבות ברזל), יהיו ההחלטות טעונות ועדת הפטור במשרד האוצר רק אם שווי ההתקשרויות עולה על 6 מיליון ₪\" (הוראה 7.6.1, סעיף 3.2).",
+   "firstTokenMs": 6673,
+   "firstTokenWaitMs": 1522,
+   "firstTokenRejectedMs": 3200,
+   "retryWaitMs": 1522,
+   "retryCount": 2,
+   "retryRejectedMs": 3200,
+   "retryRejectedCalls": 2,
+   "retryByStage": {
+    "answer": {
+     "waitMs": 1522,
+     "retries": 2,
+     "rejectedMs": 3200,
+     "rejectedCalls": 2
+    }
+   },
+   "genRegions": {
+    "us-east-1": 4
+   },
+   "totalMs": 11539,
+   "costUSD": 0.022465
+  },
+  {
+   "id": "s-15",
+   "q": "הספק שלנו עובד איתנו כבר שנים ומכיר את המערכת הכי טוב. זה מספיק כדי להגדיר אותו ספק יחיד ולהתקשר איתו בלי מכרז?",
+   "expect": "7.6.1",
+   "chapter": 7,
+   "fact": "לא ייחשבו בפני עצמם",
+   "kind": "כן/לא",
+   "retrievedCodes": [
+    "7.6.1",
+    "7.13.1",
+    "7.7.1",
+    "7.0.1",
+    "7.1.1",
+    "7.3.1",
+    "7.7.2",
+    "7.9.1"
+   ],
+   "rankedCodes": [
+    "7.6.1",
+    "7.0.1",
+    "7.13.1"
+   ],
+   "recallAt12": true,
+   "top1": true,
+   "top3": true,
+   "reranked": true,
+   "refusedAtGate": false,
+   "unverified": [],
+   "sources": [
+    "7.6.1",
+    "7.0.1"
+   ],
+   "verdict": {
+    "factFound": false,
+    "factMethod": "model",
+    "expectCited": true,
+    "hasUnverified": false,
+    "correct": false,
+    "refused": false,
+    "judgePrompt": "plain",
+    "usage": {
+     "inputTokens": 730,
+     "outputTokens": 5
+    }
+   },
+   "answerText": "לא, זה לא מספיק.\n\nעל פי הגדרה בהוראה 7.0.1, **\"ספק יחיד\"** מוגדר כ\"הספק היחיד שמסוגל לבצע את נושא ההתקשרות **לפי זכות מכוח הדין או בהתאם למצב הדברים בפועל**, על פי תקנה 3(29) בתח\"ם (הוראה 7.0.1, סעיף 87).\n\nהעובדה שהספק \"עובד איתכם כבר שנים ומכיר את המערכת הכי טוב\" היא עניין של **ניסיון וידע**, לא של **יכולת ייחודית** או **זכות משפטית** שהופכת אותו לספק יחיד בפועל.\n\nכדי להתקשר עם ספק יחיד בפטור ממכרז, על פי הוראה 7.6.1, סעיף 2.3.1, יש צורך באישור ועדת המכרזים. בנוסף, על פי הוראה 7.6.1, סעיף 1.3, גם כאשר מותר לבצע התקשרות שלא בדרך של מכרז פומבי, יש לנהל את ההליכים \"ככל הניתן באופן שקוף, הוגן ושוויוני\".\n\nלכן, עליכם לבצע **הליך בחינת קיומם של ספקים** (כמתואר בהוראה 7.6.1, סעיף 1.1 בנספח ג) כדי לוודא שאכן אין ספקים אחרים המסוגלים לבצע את העבודה.",
+   "firstTokenMs": 7414,
+   "firstTokenWaitMs": 1510,
+   "firstTokenRejectedMs": 3273,
+   "retryWaitMs": 1510,
+   "retryCount": 2,
+   "retryRejectedMs": 3273,
+   "retryRejectedCalls": 2,
+   "retryByStage": {
+    "answer": {
+     "waitMs": 1510,
+     "retries": 2,
+     "rejectedMs": 3273,
+     "rejectedCalls": 2
+    }
+   },
+   "genRegions": {
+    "us-east-1": 4
+   },
+   "totalMs": 13674,
+   "costUSD": 0.030874
+  },
+  {
+   "id": "s-16",
+   "q": "כבר קנינו מספק מסוים ברכש קטן בלי מכרז (עם כמה הצעות מחיר), ועכשיו רוצים להזמין ממנו שוב באותה דרך. כמה בסך הכול מותר להזמין מאותו ספק?",
+   "expect": "7.7.1",
+   "chapter": 7,
+   "fact": "200,000 ₪, בכל תקופה של 12 חודשים",
+   "kind": "מספרי",
+   "retrievedCodes": [
+    "7.7.1",
+    "7.6.1",
+    "7.3.1",
+    "7.0.1"
+   ],
+   "rankedCodes": [
+    "7.7.1"
+   ],
+   "recallAt12": true,
+   "top1": true,
+   "top3": true,
+   "reranked": true,
+   "refusedAtGate": false,
+   "unverified": [],
+   "sources": [
+    "7.7.1"
+   ],
+   "verdict": {
+    "factFound": true,
+    "factMethod": "literal",
+    "expectCited": true,
+    "hasUnverified": false,
+    "correct": true,
+    "refused": false,
+    "usage": {
+     "inputTokens": 0,
+     "outputTokens": 0
+    }
+   },
+   "answerText": "# תשובה\n\nעל פי הוראה 7.7.1, סכום מצטבר מקסימלי מותר להזמין מאותו ספק בתקופה מסוימת הוא **200,000 ₪**.\n\n## הפרטים:\n\nבסעיף 2.3.2 בהוראה 7.7.1 נקבע:\n\n> \"התקשר משרד עם ספק בהליך מקוצר וביקש לבצע התקשרויות נוספת, כאמור בסעיף 2.3.1 לעיל, לא יעלה הסכום המצטבר של ההתקשרויות עם אותו ספק (ההתקשרויות בהליך מקוצר והתקשרות ההמשך) על **200,000 ₪, בכל תקופה של 12 חודשים רצופים**. לעניין זה, מועד תחילת ההתקשרויות יהיה מועד פתיחת ההזמנה.\"\n\nכלומר:\n- ההתקשרות הראשונה (שכבר בוצעה) + התקשרות נוספת = עד 200,000 ₪ בסך הכול\n- התקופה המחייבת היא **12 חודשים רצופים**\n- נקודת ההתחלה היא **מועד פתיחת ההזמנה** של ההתקשרות הראשונה",
+   "firstTokenMs": 11055,
+   "firstTokenWaitMs": 2542,
+   "firstTokenRejectedMs": 4359,
+   "retryWaitMs": 2542,
+   "retryCount": 3,
+   "retryRejectedMs": 4359,
+   "retryRejectedCalls": 3,
+   "retryByStage": {
+    "rerank": {
+     "waitMs": 1015,
+     "retries": 1,
+     "rejectedMs": 1598,
+     "rejectedCalls": 1
+    },
+    "answer": {
+     "waitMs": 1527,
+     "retries": 2,
+     "rejectedMs": 2761,
+     "rejectedCalls": 2
+    }
+   },
+   "genRegions": {
+    "us-east-1": 5
+   },
+   "totalMs": 16385,
+   "costUSD": 0.031004
+  },
+  {
+   "id": "s-17",
+   "q": "עד איזה סכום ועדת המכרזים של המשרד יכולה לאשר לבד מכרז שבו פונים רק לכמה ספקים נבחרים, בלי פרסום לכולם?",
+   "expect": "7.7.2",
+   "chapter": 7,
+   "fact": "עד 300,000 ₪",
+   "kind": "מספרי",
+   "retrievedCodes": [
+    "7.7.2",
+    "7.6.1",
+    "7.1.1",
+    "7.7.1",
+    "7.4.1",
+    "7.3.1"
+   ],
+   "rankedCodes": [
+    "7.7.2",
+    "7.6.1",
+    "7.4.1",
+    "7.1.1"
+   ],
+   "recallAt12": true,
+   "top1": true,
+   "top3": true,
+   "reranked": true,
+   "refusedAtGate": false,
+   "unverified": [],
+   "sources": [
+    "7.7.2"
+   ],
+   "verdict": {
+    "factFound": true,
+    "factMethod": "literal",
+    "expectCited": true,
+    "hasUnverified": false,
+    "correct": true,
+    "refused": false,
+    "usage": {
+     "inputTokens": 0,
+     "outputTokens": 0
+    }
+   },
+   "answerText": "# תשובה\n\nעל פי הוראה 7.7.2 — \"מכרז סגור\":\n\n**ועדת המכרזים רשאית לאשר התקשרות במכרז סגור בשווי של עד 300,000 ₪** (סעיף 3.1.1).\n\nכאשר שווי ההתקשרות עולה על 300,000 ₪, ועדת המכרזים חייבת להעביר את הבקשה לוועדת הפטור המשרדית לצורך אישור (סעיף 3.1.1.1).\n\nבנוסף, התקשרות בשווי העולה על 4,000,000 ₪ טעונה אישור של ועדת הפטור (סעיף 3.1.1.2).",
+   "firstTokenMs": 7245,
+   "firstTokenWaitMs": 1517,
+   "firstTokenRejectedMs": 3544,
+   "retryWaitMs": 1517,
+   "retryCount": 2,
+   "retryRejectedMs": 3544,
+   "retryRejectedCalls": 2,
+   "retryByStage": {
+    "answer": {
+     "waitMs": 1517,
+     "retries": 2,
+     "rejectedMs": 3544,
+     "rejectedCalls": 2
+    }
+   },
+   "genRegions": {
+    "us-east-1": 4
+   },
+   "totalMs": 10471,
+   "costUSD": 0.028762
+  },
+  {
+   "id": "s-18",
+   "q": "קנינו משהו ב-60 אלף ש\"ח בלי מכרז, אחרי שביקשנו כמה הצעות מחיר. צריך לפרסם את ההתקשרות הזאת באתר מינהל הרכש?",
+   "expect": "7.9.1",
+   "chapter": 7,
+   "fact": "למעט התקשרות לפי תקנה 3(1) ו-3(8)",
+   "kind": "כן/לא",
+   "retrievedCodes": [
+    "7.9.1",
+    "7.7.1",
+    "7.3.1",
+    "7.0.1",
+    "7.7.2",
+    "7.4.1",
+    "7.6.1",
+    "7.13.1"
+   ],
+   "rankedCodes": [
+    "7.7.2",
+    "7.9.1",
+    "7.7.1",
+    "7.13.1"
+   ],
+   "recallAt12": true,
+   "top1": false,
+   "top3": true,
+   "reranked": true,
+   "refusedAtGate": false,
+   "unverified": [],
+   "sources": [
+    "7.9.1",
+    "7.7.1"
+   ],
+   "verdict": {
+    "factFound": false,
+    "factMethod": "model",
+    "expectCited": true,
+    "hasUnverified": false,
+    "correct": false,
+    "refused": false,
+    "judgePrompt": "plain",
+    "usage": {
+     "inputTokens": 829,
+     "outputTokens": 5
+    }
+   },
+   "answerText": "# תשובה\n\nכן, צריך לפרסם את ההתקשרות באתר מינהל הרכש.\n\n## הנימוק\n\nהתקשרות בשווי של 60,000 ₪ בלי מכרז מבוצעת בהליך רכש מקוצר, בהתאם לתקנה 3(1) לתח\"ם. (הוראה 7.7.1)\n\nהתקשרויות בהליך רכש מקוצר **כן** טעונות פרסום. הוראה 7.9.1 קובעת שהתקשרויות בפטור ממכרז (למעט התקשרויות לפי תקנה 3(1) ו-3(8)) נדרשות לפרסום. עם זאת, בנספח ב של הוראה 7.9.1, בסעיף 5, מפורטות \"התקשרות בפטור ממכרז לפי תקנה 3 לתח\"ם, **למעט התקשרויות לפי תקנה 3(1) ו-3(8)**\".\n\n**אולם**, הוראה 7.7.1 עצמה (הוראת ההליך המקוצר) אינה מפטרת מפרסום. הקטעים שברשותי אינם מכילים הנחיה מפורשת בדבר פטור מפרסום של התקשרויות בהליך מקוצר.\n\n**לא מצאתי במסמכים שברשותי** הנחיה ברורה בדבר האם התקשרויות בהליך מקוצר (תקנה 3(1)) טעונות פרסום או פטורות ממנו. ההפניה בנספח ב של הוראה 7.9.1 מעלה אי-בהירות בנושא זה.\n\n**המלצה**: יש לפנות למינהל הרכש הממשלתי או ליועץ משפטי כדי לברר את דרישת הפרסום במקרה זה.",
+   "firstTokenMs": 9102,
+   "firstTokenWaitMs": 1506,
+   "firstTokenRejectedMs": 4575,
+   "retryWaitMs": 1506,
+   "retryCount": 2,
+   "retryRejectedMs": 4575,
+   "retryRejectedCalls": 2,
+   "retryByStage": {
+    "answer": {
+     "waitMs": 1506,
+     "retries": 2,
+     "rejectedMs": 4575,
+     "rejectedCalls": 2
+    }
+   },
+   "genRegions": {
+    "us-east-1": 4
+   },
+   "totalMs": 17132,
+   "costUSD": 0.036682
+  },
+  {
+   "id": "s-19",
+   "q": "אנחנו במשרד הרווחה ועובדים עם עמותה שמפעילה עבורנו שירות טיפולי. אישור התשלום אצלנו לוקח חודשים — אפשר לשלם לה חלק מהסכום לפני שסיימנו את כל הבדיקות?",
+   "expect": "7.10.3",
+   "chapter": 7,
+   "fact": "עד 70% מהיקף התשלום",
+   "kind": "מספרי",
+   "retrievedCodes": [
+    "7.10.3",
+    "7.7.1",
+    "7.3.3",
+    "7.10.7",
+    "7.3.1",
+    "7.3.7",
+    "7.6.1",
+    "7.1.1"
+   ],
+   "rankedCodes": [
+    "7.10.3",
+    "7.7.1",
+    "7.3.3"
+   ],
+   "recallAt12": true,
+   "top1": true,
+   "top3": true,
+   "reranked": true,
+   "refusedAtGate": false,
+   "unverified": [],
+   "sources": [
+    "7.10.3"
+   ],
+   "verdict": {
+    "factFound": true,
+    "factMethod": "literal",
+    "expectCited": true,
+    "hasUnverified": false,
+    "correct": true,
+    "refused": false,
+    "usage": {
+     "inputTokens": 0,
+     "outputTokens": 0
+    }
+   },
+   "answerText": "# תשובה\n\nכן, אפשר לשלם חלק מהסכום לפני השלמת כל הבדיקות, אך בתנאים מסוימים.\n\n## התנאים\n\nעל פי הוראה 7.10.3, סעיף 1.1.2.2, **החשב רשאי לאשר תשלום בגובה של עד 70% מהיקף התשלום, טרם השלמת הבדיקות הנדרשות** לצורך אישורו הסופי של התשלום, **בכפוף לתנאים הבאים:**\n\n1. **קבלת דוח ביצוע ראשוני או כל מסמך אחר הנדרש** במסגרת ההתקשרות בגין הסכומים האמורים.\n\n2. **אישור הגורם המקצועי הבכיר** האחראי על קבלת השירות.\n\n## הערה חשובה\n\nזהו הקלה מיוחדת **\"על מנת להקל על הספק בהתקשרויות בהן תהליך אישור הביצוע טרם העברת תשלום אורך זמן רב\"** (הוראה 7.10.3, סעיף 1.1.2.2).\n\nהתשלום הנותר (עד 30%) יבוצע לאחר השלמת כל הבדיקות הנדרשות.",
+   "firstTokenMs": 8350,
+   "firstTokenWaitMs": 2519,
+   "firstTokenRejectedMs": 3853,
+   "retryWaitMs": 2519,
+   "retryCount": 3,
+   "retryRejectedMs": 3853,
+   "retryRejectedCalls": 3,
+   "retryByStage": {
+    "rerank": {
+     "waitMs": 1006,
+     "retries": 1,
+     "rejectedMs": 1074,
+     "rejectedCalls": 1
+    },
+    "answer": {
+     "waitMs": 1513,
+     "retries": 2,
+     "rejectedMs": 2779,
+     "rejectedCalls": 2
+    }
+   },
+   "genRegions": {
+    "us-east-1": 5
+   },
+   "totalMs": 13744,
+   "costUSD": 0.029965000000000002
+  },
+  {
+   "id": "s-20",
+   "q": "אנחנו רוצים לקנות כלי AI שלא נמצא בנימבוס, ולהעביר אליו מידע של המשרד כדי לאמן מודל חדש. ממי צריך לקבל אישור?",
+   "expect": "7.10.7",
+   "chapter": 7,
+   "fact": "הסגן הבכיר לחשב הכללי בחטיבת דאטה",
+   "kind": "מי-מאשר",
+   "retrievedCodes": [
+    "7.10.7",
+    "7.2.3",
+    "7.3.7",
+    "7.7.1",
+    "7.3.4",
+    "7.13.1",
+    "7.1.1",
+    "7.3.1"
+   ],
+   "rankedCodes": [
+    "7.10.7",
+    "7.2.3",
+    "7.3.7"
+   ],
+   "recallAt12": true,
+   "top1": true,
+   "top3": true,
+   "reranked": true,
+   "refusedAtGate": false,
+   "unverified": [],
+   "sources": [
+    "7.10.7"
+   ],
+   "verdict": {
+    "factFound": true,
+    "factMethod": "literal",
+    "expectCited": true,
+    "hasUnverified": false,
+    "correct": true,
+    "refused": false,
+    "usage": {
+     "inputTokens": 0,
+     "outputTokens": 0
+    }
+   },
+   "answerText": "על פי הוראה 7.10.7, סעיף 2.4.3 (המופיע בקטע [18]):\n\n**צריך לקבל אישור מהסגן הבכיר לחשב הכללי בחטיבת דאטה, חדשנות ודיגיטל**, באמצעות כתובת הדואר האלקטרוני danamil@mof.gov.il.\n\nההוראה קובעת:\n\n> \"משרדי ממשלה ויחידות סמך המעוניינים לפעול לפי סעיף 2.2ד לעיל, ובכלל זה **לאפשר הוצאת מידע ממשלתי לצורך אימון מודל חדש**, יפנו עם הנימוקים הנדרשים לקבל את אישור הסגן הבכיר לחשב הכללי בחטיבת דאטה, חדשנות ודיגיטל\".\n\nבנוסף, על פי סעיף 2.4.4 (קטע [17]), במסגרת בחינת הבקשה תיבחן ועדת מכרזים AI (ועדה מיוחדת שמינה החשב הכללי) האם מדובר בהתקשרות מורכבת וייחודית, ובהתאם תערוך הוועדה את ההתקשרות או תסייע למשרד בהכוונה וייעוץ.",
+   "firstTokenMs": 6857,
+   "firstTokenWaitMs": 1526,
+   "firstTokenRejectedMs": 3228,
+   "retryWaitMs": 1526,
+   "retryCount": 2,
+   "retryRejectedMs": 3228,
+   "retryRejectedCalls": 2,
+   "retryByStage": {
+    "answer": {
+     "waitMs": 1526,
+     "retries": 2,
+     "rejectedMs": 3228,
+     "rejectedCalls": 2
+    }
+   },
+   "genRegions": {
+    "us-east-1": 4
+   },
+   "totalMs": 12813,
+   "costUSD": 0.030409
+  },
+  {
+   "id": "s-21",
+   "q": "מותר לתת לצ'טבוט או לכלי בינה מלאכותית להחליט לבד אם לאשר בקשה של אזרח?",
+   "expect": "7.10.7",
+   "chapter": 7,
+   "fact": "ישמשו לצורך יצירת המלצות בלבד",
+   "kind": "כן/לא",
+   "retrievedCodes": [
+    "7.10.7",
+    "7.3.3",
+    "7.7.2",
+    "7.3.7",
+    "7.10.3",
+    "7.4.1"
+   ],
+   "rankedCodes": [
+    "7.10.7",
+    "7.3.3",
+    "7.7.2",
+    "7.3.7"
+   ],
+   "recallAt12": true,
+   "top1": true,
+   "top3": true,
+   "reranked": true,
+   "refusedAtGate": false,
+   "unverified": [],
+   "sources": [
+    "7.10.7"
+   ],
+   "verdict": {
+    "factFound": true,
+    "factMethod": "literal",
+    "expectCited": true,
+    "hasUnverified": false,
+    "correct": true,
+    "refused": false,
+    "usage": {
+     "inputTokens": 0,
+     "outputTokens": 0
+    }
+   },
+   "answerText": "לא, לא מותר.\n\nעל פי הוראה 7.10.7, סעיף 2.3.5.3:\n\n> \"ניתן להשתמש בשירותים אלו כדי לתמוך את עבודתם של בעלי תפקידים מוסמכים, אולם שירותים אלו ישמשו לצורך יצירת המלצות בלבד. **במסגרת כך, השימוש בשירותים אלו לא יהווה כלי לקבלת החלטה על ידי הרשות** ועל המזמין לוודא כי קבלת ההחלטה הסופית מבוצעת על ידי הגורם האנושי בעל הסמכות לכך בהתאם להוראות הדין. במקרה זה, על המזמין לוודא כי בעת קבלת ההחלטה נלקחים בחשבון כלל השיקולים הרלוונטיים מלבד ההמלצה של השירות.\"\n\nכלומר, כלי בינה מלאכותית יכול להציע המלצות בלבד, אך **קבלת ההחלטה הסופית חייבת להיעשות על ידי גורם אנושי בעל סמכות**, ובעת קבלת ההחלטה יש לשקול את כל השיקולים הרלוונטיים, לא רק את ההמלצה של הכלי.",
+   "firstTokenMs": 6897,
+   "firstTokenWaitMs": 1526,
+   "firstTokenRejectedMs": 3195,
+   "retryWaitMs": 1526,
+   "retryCount": 2,
+   "retryRejectedMs": 3195,
+   "retryRejectedCalls": 2,
+   "retryByStage": {
+    "answer": {
+     "waitMs": 1526,
+     "retries": 2,
+     "rejectedMs": 3195,
+     "rejectedCalls": 2
+    }
+   },
+   "genRegions": {
+    "us-east-1": 4
+   },
+   "totalMs": 13448,
+   "costUSD": 0.025962
+  },
+  {
+   "id": "s-22",
+   "q": "יש לנו מאגר של 40 יועצים רשומים. לכמה מהם לפחות חייבים לפנות כשמבקשים הצעות לעבודה?",
+   "expect": "7.13.1",
+   "chapter": 7,
+   "fact": "5 ספקים לפחות",
+   "kind": "מספרי",
+   "retrievedCodes": [
+    "7.13.1",
+    "7.3.1",
+    "7.7.2"
+   ],
+   "rankedCodes": [
+    "7.13.1"
+   ],
+   "recallAt12": true,
+   "top1": true,
+   "top3": true,
+   "reranked": true,
+   "refusedAtGate": false,
+   "unverified": [],
+   "sources": [
+    "7.13.1"
+   ],
+   "verdict": {
+    "factFound": true,
+    "factMethod": "literal",
+    "expectCited": true,
+    "hasUnverified": false,
+    "correct": true,
+    "refused": false,
+    "usage": {
+     "inputTokens": 0,
+     "outputTokens": 0
+    }
+   },
+   "answerText": "על פי הוראה 7.13.1, סעיף 2.10.6.2:\n\n**ועדת המכרזים תשלוף 5 ספקים לפחות כדי לפנות אליהם לקבלת הצעות.**\n\nכלומר, גם אם יש לכם 40 יועצים רשומים במאגר, חייבים לפנות **לפחות ל-5 מהם**.\n\nעם זאת, יש חריג: על פי סעיף 2.10.6.8 (המופיע בקטע [24]), **במקרה שבו קבוצת הספקים לשליפה כוללת עד 10 ספקים, תפנה ועדת המכרזים לכל הספקים לקבלת הצעות**. במקרה שלכם עם 40 יועצים, הדרישה היא 5 לפחות.",
+   "firstTokenMs": 4044,
+   "firstTokenWaitMs": 512,
+   "firstTokenRejectedMs": 844,
+   "retryWaitMs": 512,
+   "retryCount": 1,
+   "retryRejectedMs": 844,
+   "retryRejectedCalls": 1,
+   "retryByStage": {
+    "answer": {
+     "waitMs": 512,
+     "retries": 1,
+     "rejectedMs": 844,
+     "rejectedCalls": 1
+    }
+   },
+   "genRegions": {
+    "us-east-1": 3
+   },
+   "totalMs": 8161,
+   "costUSD": 0.020544
+  }
+ ],
+ "controls": [
+  {
+   "id": "c-01",
+   "q": "המשרד רוצה למכור מחשבים ישנים וריהוט שכבר לא צריך. עד איזה סכום אפשר למכור בלי מכרז?",
+   "refused": true,
+   "refusedLoose": true,
+   "clarified": false,
+   "answerText": "לא מצאתי במסמכים שברשותי.\n\nהקטעים המצורפים עוסקים בהתקשרויות למטרת **רכישה** של טובין, שירותים ועבודות (כלומר, כאשר המשרד הוא הקונה). השאלה שלך עוסקת במכירה של נכסים ישנים של המשרד, וזו סוגיה שונה לחלוטין שאינה מכוסה בקטעים שהועמדו לרשותי.",
+   "sources": [],
+   "unverified": [],
+   "retryWaitMs": 1511,
+   "retryCount": 2,
+   "retryRejectedMs": 3079,
+   "retryRejectedCalls": 2,
+   "retryByStage": {
+    "answer": {
+     "waitMs": 1511,
+     "retries": 2,
+     "rejectedMs": 3079,
+     "rejectedCalls": 2
+    }
+   },
+   "genRegions": {
+    "us-east-1": 4
+   },
+   "costUSD": 0.029718
+  },
+  {
+   "id": "c-02",
+   "q": "אנחנו יוצאים למכרז לעבודות תשתית ופיתוח. יש חובה שחלק מחומרי המילוי יהיו ממוחזרים? כמה?",
+   "refused": true,
+   "refusedLoose": true,
+   "clarified": false,
+   "answerText": "לא מצאתי במסמכים שברשותי.\n\nהקטעים המצורפים מהוראות 7.3.1, 7.7.1, 7.6.1 ו-7.3.3 עוסקים בנושאים כמו מסמכי מכרז, תנאי סף, ערבויות, הליכים מקוצרים ופטורים ממכרז, אך אינם מכילים הנחיות בדבר דרישות לשימוש בחומרים ממוחזרים בעבודות תשתית ופיתוח.",
+   "sources": [],
+   "unverified": [],
+   "retryWaitMs": 2515,
+   "retryCount": 3,
+   "retryRejectedMs": 4807,
+   "retryRejectedCalls": 3,
+   "retryByStage": {
+    "rerank": {
+     "waitMs": 1002,
+     "retries": 1,
+     "rejectedMs": 1317,
+     "rejectedCalls": 1
+    },
+    "answer": {
+     "waitMs": 1513,
+     "retries": 2,
+     "rejectedMs": 3490,
+     "rejectedCalls": 2
+    }
+   },
+   "genRegions": {
+    "us-east-1": 5
+   },
+   "costUSD": 0.030955
+  },
+  {
+   "id": "c-03",
+   "q": "אנחנו מבצעים פרויקט דרך הרשות לפיתוח ירושלים, בלי מכרז. כמה תקורה משלמים להם?",
+   "refused": true,
+   "refusedLoose": true,
+   "clarified": false,
+   "answerText": "לא מצאתי במסמכים שברשותי.\n\nהקטעים המצורפים עוסקים בכללים לביצוע התקשרויות בפטור ממכרז (הוראה 7.6.1), בניהול מאגרים (הוראה 7.13.1) ובהליך רכש מקוצר (הוראה 7.7.1). אף אחד מהם אינו מכיל הנחיות ספציפיות בדבר תקורה המשולמת לרשות לפיתוח ירושלים.\n\nכדי לקבל תשובה על שאלה זו, יהיה צורך בהוראות נוספות העוסקות בהתקשרויות עם רשויות מקומיות או עם רשות לפיתוח ירושלים בפרט.",
+   "sources": [],
+   "unverified": [],
+   "retryWaitMs": 510,
+   "retryCount": 1,
+   "retryRejectedMs": 2004,
+   "retryRejectedCalls": 1,
+   "retryByStage": {
+    "answer": {
+     "waitMs": 510,
+     "retries": 1,
+     "rejectedMs": 2004,
+     "rejectedCalls": 1
+    }
+   },
+   "genRegions": {
+    "us-east-1": 3
+   },
+   "costUSD": 0.025926
+  },
+  {
+   "id": "c-04",
+   "q": "אפשר להשאיר הזמנת מסגרת פתוחה במרכבה לכמה שנים, או שצריך לפתוח חדשה בכל שנה?",
+   "refused": true,
+   "refusedLoose": true,
+   "clarified": false,
+   "answerText": "לא מצאתי במסמכים שברשותי.",
+   "sources": [],
+   "unverified": [],
+   "retryWaitMs": 0,
+   "retryCount": 0,
+   "retryRejectedMs": 0,
+   "retryRejectedCalls": 0,
+   "retryByStage": {},
+   "genRegions": {},
+   "costUSD": 0
+  },
+  {
+   "id": "c-05",
+   "q": "אנחנו רוצים לקלוט בנות ובני שירות לאומי במשרד בשנה הבאה. עד מתי צריך להגיש את הבקשה?",
+   "refused": true,
+   "refusedLoose": true,
+   "clarified": false,
+   "answerText": "לא מצאתי במסמכים שברשותי.",
+   "sources": [],
+   "unverified": [],
+   "retryWaitMs": 0,
+   "retryCount": 0,
+   "retryRejectedMs": 0,
+   "retryRejectedCalls": 0,
+   "retryByStage": {},
+   "genRegions": {},
+   "costUSD": 0
+  },
+  {
+   "id": "c-06",
+   "q": "מימנו מחקר באוניברסיטה, והתוצאות הפכו למוצר מסחרי. המשרד מקבל תמלוגים? כמה?",
+   "refused": true,
+   "refusedLoose": true,
+   "clarified": false,
+   "answerText": "לא מצאתי במסמכים שברשותי.",
+   "sources": [],
+   "unverified": [],
+   "retryWaitMs": 0,
+   "retryCount": 0,
+   "retryRejectedMs": 0,
+   "retryRejectedCalls": 0,
+   "retryByStage": {},
+   "genRegions": {},
+   "costUSD": 0
+  },
+  {
+   "id": "c-07",
+   "q": "אנחנו מתכננים סקר ארצי בקרב אזרחים. חייבים לתאם אותו קודם עם הלשכה המרכזית לסטטיסטיקה?",
+   "refused": true,
+   "refusedLoose": true,
+   "clarified": false,
+   "answerText": "לא מצאתי במסמכים שברשותי.",
+   "sources": [],
+   "unverified": [],
+   "retryWaitMs": 0,
+   "retryCount": 0,
+   "retryRejectedMs": 0,
+   "retryRejectedCalls": 0,
+   "retryByStage": {},
+   "genRegions": {},
+   "costUSD": 0
+  },
+  {
+   "id": "c-08",
+   "q": "כמה ימי חופשה שנתית מגיעים לעובד מדינה בשנה הראשונה שלו?",
+   "refused": true,
+   "refusedLoose": true,
+   "clarified": false,
+   "answerText": "לא מצאתי במסמכים שברשותי.",
+   "sources": [],
+   "unverified": [],
+   "retryWaitMs": 0,
+   "retryCount": 0,
+   "retryRejectedMs": 0,
+   "retryRejectedCalls": 0,
+   "retryByStage": {},
+   "genRegions": {},
+   "costUSD": 0
+  },
+  {
+   "id": "c-09",
+   "q": "מה גובה האש\"ל היומי שמקבלים בנסיעת עבודה לחו\"ל?",
+   "refused": true,
+   "refusedLoose": true,
+   "clarified": false,
+   "answerText": "לא מצאתי במסמכים שברשותי.",
+   "sources": [],
+   "unverified": [],
+   "retryWaitMs": 0,
+   "retryCount": 0,
+   "retryRejectedMs": 0,
+   "retryRejectedCalls": 0,
+   "retryByStage": {},
+   "genRegions": {},
+   "costUSD": 0
+  },
+  {
+   "id": "c-10",
+   "q": "מה מדרגות מס ההכנסה על משכורת ב-2026?",
+   "refused": true,
+   "refusedLoose": true,
+   "clarified": false,
+   "answerText": "לא מצאתי במסמכים שברשותי.",
+   "sources": [],
+   "unverified": [],
+   "retryWaitMs": 0,
+   "retryCount": 0,
+   "retryRejectedMs": 0,
+   "retryRejectedCalls": 0,
+   "retryByStage": {},
+   "genRegions": {},
+   "costUSD": 0
+  },
+  {
+   "id": "c-11",
+   "q": "מותר לי להשתמש ברכב הממשלתי הצמוד לנסיעות פרטיות בסוף השבוע?",
+   "refused": true,
+   "refusedLoose": true,
+   "clarified": false,
+   "answerText": "לא מצאתי במסמכים שברשותי.",
+   "sources": [],
+   "unverified": [],
+   "retryWaitMs": 0,
+   "retryCount": 0,
+   "retryRejectedMs": 0,
+   "retryRejectedCalls": 0,
+   "retryByStage": {},
+   "genRegions": {},
+   "costUSD": 0
+  },
+  {
+   "id": "c-12",
+   "q": "באיזה גיל עובד מדינה יכול לצאת לפנסיה מוקדמת, ובאיזו קרן אני מבוטח?",
+   "refused": true,
+   "refusedLoose": true,
+   "clarified": false,
+   "answerText": "לא מצאתי במסמכים שברשותי.",
+   "sources": [],
+   "unverified": [],
+   "retryWaitMs": 0,
+   "retryCount": 0,
+   "retryRejectedMs": 0,
+   "retryRejectedCalls": 0,
+   "retryByStage": {},
+   "genRegions": {},
+   "costUSD": 0
+  },
+  {
+   "id": "c-13",
+   "q": "כמה ימי מחלה צוברים בחודש, ואיך מדווחים על ימי מחלה של ילד?",
+   "refused": true,
+   "refusedLoose": true,
+   "clarified": false,
+   "answerText": "לא מצאתי במסמכים שברשותי.",
+   "sources": [],
+   "unverified": [],
+   "retryWaitMs": 0,
+   "retryCount": 0,
+   "retryRejectedMs": 0,
+   "retryRejectedCalls": 0,
+   "retryByStage": {},
+   "genRegions": {},
+   "costUSD": 0
+  },
+  {
+   "id": "c-14",
+   "q": "המשרד מחזיר הוצאות חניה כשאני נוסע ברכב הפרטי לפגישה מחוץ למשרד?",
+   "refused": true,
+   "refusedLoose": true,
+   "clarified": false,
+   "answerText": "לא מצאתי במסמכים שברשותי.\n\nהקטעים המצורפים עוסקים בנושאים הבאים:\n- פנייה מוקדמת לקבלת מידע (RFI) — הוראה 7.2.3\n- ערבויות דיגיטליות — הוראה 7.3.7\n- התקשרויות למתן שירותים חברתיים — הוראה 7.10.3\n- הגדרות בנושא התקשרויות ורכישות — הוראה 7.0.1\n\nאף אחד מהם אינו עוסק בהחזר הוצאות נסיעה או חניה של עובדים.",
+   "sources": [],
+   "unverified": [],
+   "retryWaitMs": 510,
+   "retryCount": 1,
+   "retryRejectedMs": 1460,
+   "retryRejectedCalls": 1,
+   "retryByStage": {
+    "answer": {
+     "waitMs": 510,
+     "retries": 1,
+     "rejectedMs": 1460,
+     "rejectedCalls": 1
+    }
+   },
+   "genRegions": {
+    "us-east-1": 3
+   },
+   "costUSD": 0.030310999999999998
+  }
+ ]
+}

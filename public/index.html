@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="he">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>עוזר הנהלים — הוראות תכ"ם, פרק 7</title>
+<style>
+  :root{
+    --navy:#0f2a43; --navy2:#16395c; --gold:#c9a227;
+    --bg:#f6f8fa; --card:#fff; --ink:#1c2733; --muted:#5c6b7a;
+    --line:#e3e9ef; --blue-soft:#e8f0f9; --amber-soft:#fdf1e0; --amber:#b45309;
+    --red:#b3261e; --red-soft:#fdecea; --red-ink:#611a15;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{font-family:"Segoe UI","Assistant",Arial,sans-serif; background:var(--bg); color:var(--ink); line-height:1.7;}
+  header{background:linear-gradient(135deg,var(--navy),var(--navy2)); color:#fff; padding:26px 20px; text-align:center;}
+  header h1{font-size:1.5rem; font-weight:800;}
+  header p{color:#d7e2ee; font-size:.92rem; margin-top:4px;}
+  .wrap{max-width:820px; margin:0 auto; padding:24px 20px 60px;}
+  .askbox{background:var(--card); border:1px solid var(--line); border-radius:12px; padding:18px; box-shadow:0 1px 3px rgba(15,42,67,.06);}
+
+  /* Collection picker: a labeled row above the question box. flex-wrap lets the
+     label drop to its own line at 375px without ever forcing a horizontal
+     scrollbar (the label + select together are wider than a phone viewport
+     only if they stay on one line). */
+  .collection-row{display:flex; align-items:center; gap:10px; margin-bottom:14px; flex-wrap:wrap;}
+  .collection-row label{font-size:.88rem; font-weight:700; color:var(--navy2); white-space:nowrap;}
+  #collection{flex:1; min-width:180px; border:1px solid var(--line); border-radius:8px; padding:9px 10px; font:inherit; background:#fff; color:var(--ink);}
+  #collection:focus{outline:2px solid var(--navy2); outline-offset:1px;}
+  /* Option/optgroup labels mix Hebrew ("הוראות תכ"ם") and English ("AWS bedrock")
+     inside one RTL <select>. plaintext lets each label pick its own direction
+     from its own first strong character instead of inheriting the page's RTL,
+     so the English service names don't get visually reversed. */
+  #collection optgroup, #collection option{ unicode-bidi:plaintext; }
+
+  textarea{width:100%; border:1px solid var(--line); border-radius:8px; padding:12px; font:inherit; resize:vertical; min-height:74px;}
+  textarea:focus{outline:2px solid var(--navy2); outline-offset:1px;}
+  .row{display:flex; gap:10px; align-items:center; margin-top:10px; flex-wrap:wrap;}
+  button{background:var(--navy); color:#fff; border:0; border-radius:8px; padding:10px 22px; font:inherit; font-weight:700; cursor:pointer;}
+  button:disabled{opacity:.5; cursor:default;}
+  .answer .h{display:block; font-weight:700; margin:16px 0 6px; color:var(--navy2);}
+  .answer .h:first-child{margin-top:0;}
+  .samples{margin-top:14px; display:flex; flex-wrap:wrap; gap:8px;}
+  .samples button{background:#eef2f6; color:var(--navy2); font-weight:600; font-size:.85rem; padding:6px 12px;}
+
+  .answer{background:var(--card); border:1px solid var(--line); border-inline-start:5px solid var(--gold); border-radius:12px; padding:20px 22px; margin-top:20px; white-space:pre-wrap;}
+  /* A genuine network/server error — distinct red treatment, never used for
+     the refusal state below (that one is a correct, calibrated answer). */
+  .answer.error{border-inline-start-color:var(--red); background:var(--red-soft); color:var(--red-ink);}
+  /* While the answer is still arriving: a caret after the last character, so a
+     pause between fragments reads as "still writing" rather than "finished". */
+  .answer.streaming::after{content:"▌"; color:var(--gold); animation:blink 1s step-end infinite; margin-inline-start:2px;}
+  @keyframes blink{50%{opacity:0;}}
+
+  /* The waiting state, shown for the ~2 seconds between pressing שאל and the
+     model's first word. It exists because that gap is retrieval, not writing,
+     and an empty panel there is the one moment the demo looks stuck. */
+  .thinking{background:var(--card); border:1px solid var(--line); border-inline-start:5px solid var(--navy2); border-radius:12px; padding:18px 22px; margin-top:20px; color:var(--muted); display:flex; align-items:center; gap:10px; animation:fadeUp .25s ease-out;}
+  .thinking .dots{display:inline-flex; gap:4px;}
+  .thinking .dots i{width:7px; height:7px; border-radius:50%; background:var(--navy2); opacity:.25; animation:dot 1.2s infinite;}
+  .thinking .dots i:nth-child(2){animation-delay:.18s;}
+  .thinking .dots i:nth-child(3){animation-delay:.36s;}
+  @keyframes dot{0%,60%,100%{opacity:.25; transform:translateY(0);} 30%{opacity:1; transform:translateY(-3px);}}
+  @keyframes fadeUp{from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:none;}}
+
+  /* The answer panel fades in ONCE, when it is created. The streaming loop
+     mutates this element's innerHTML instead of replacing the element, so the
+     entrance animation cannot restart on every frame — replacing the node
+     sixty times a second made the whole block strobe. */
+  .answer{animation:fadeUp .25s ease-out;}
+  @media (prefers-reduced-motion: reduce){
+    .thinking, .answer{animation:none;}
+    .answer.streaming::after{animation:none;}
+  }
+  /* A truncated answer must never look like a finished one. */
+  .warn{margin-top:14px; padding:10px 12px; border-radius:8px; background:#fdf6e3; border-inline-start:4px solid #b45309; color:#7c4a06; font-size:.9rem;}
+
+  /* The "I don't know" answer is a deliberate, calibrated feature (MIN_SCORE in
+     config.ts), not a failure — so it gets a calm informational panel, not the
+     red error style and not the gold "here is your answer" style either. */
+  .refusal{background:var(--blue-soft); border:1px solid rgba(22,57,92,.15); border-inline-start:5px solid var(--navy2); border-radius:12px; padding:20px 22px; margin-top:20px;}
+  .refusal h3{color:var(--navy2); font-size:1rem;}
+  .refusal p{margin-top:10px; white-space:pre-wrap;}
+  .refusal-note{color:var(--muted); font-size:.86rem;}
+  /* A refusal that goes on to QUOTE the rule it rests on (REFUSAL_KEEPS_QUOTED_SOURCES).
+     Not the calm "I don't know" panel — there is a basis, and it is shown — and
+     not a plain answer either: the model itself said it found nothing explicit,
+     and the reader has to see that before trusting the quote. */
+  .partial{background:var(--blue-soft); border:1px solid rgba(22,57,92,.15); border-inline-start:5px solid var(--navy2); border-radius:12px; padding:12px 18px; margin-top:20px;}
+  .partial h3{color:var(--navy2); font-size:.95rem;}
+  .partial p{margin-top:4px; color:var(--muted); font-size:.86rem;}
+  .partial + .answer{margin-top:10px;}
+
+  .sources{background:var(--blue-soft); border-radius:10px; padding:14px 18px; margin-top:16px;}
+  .sources h3{font-size:.95rem; color:var(--navy2); margin-bottom:8px;}
+  .sources li{list-style:none; padding:5px 0; border-bottom:1px dashed rgba(22,57,92,.15); font-size:.92rem;}
+  .sources li:last-child{border-bottom:none;}
+  .sources a{color:var(--navy2);}
+
+  /* "מה המערכת קראה" — the full retrieval set, collapsed by default. This is a
+     deliberate "show your work" disclosure for the demo, styled to
+     feel like a considered part of the UI rather than a debug dump: quieter
+     background than .sources, a custom rotating chevron, no default <details>
+     marker (which renders inconsistently across browsers in RTL contexts). */
+  .retrieved{background:#f1f4f7; border:1px solid var(--line); border-radius:10px; padding:0 18px; margin-top:14px;}
+  .retrieved summary{list-style:none; cursor:pointer; padding:12px 0; font-weight:700; color:var(--navy2); font-size:.92rem; display:flex; align-items:center; gap:8px; user-select:none;}
+  .retrieved summary::-webkit-details-marker{display:none;}
+  .retrieved summary::before{content:'▸'; display:inline-block; color:var(--muted); font-size:.75em; transition:transform .15s ease;}
+  .retrieved[open] summary::before{transform:rotate(90deg);}
+  .retrieved ul{padding-bottom:12px;}
+  .retrieved li{list-style:none; padding:5px 0; border-bottom:1px dashed rgba(22,57,92,.12); font-size:.88rem; color:var(--muted);}
+  .retrieved li:last-child{border-bottom:none;}
+
+  /* Amber, not red: the answer is still usable, one label on it is not
+     trustworthy. Red is reserved for a failed request. */
+  .unverified{background:#fdf6e3; border:1px solid #d8b45a; border-right:4px solid #b8860b;
+              border-radius:10px; padding:12px 16px; margin-top:14px;}
+  .unverified h3{font-size:.92rem; color:#7a5c05; margin-bottom:6px;}
+  .unverified p{font-size:.88rem; color:#5c4703;}
+  .unverified code{background:rgba(184,134,11,.14); padding:1px 5px; border-radius:4px;}
+  .meta{color:var(--muted); font-size:.82rem; margin-top:12px;}
+  .notice{background:var(--amber-soft); color:var(--amber); border-radius:8px; padding:10px 14px; font-size:.86rem; margin-top:18px;}
+  code{direction:ltr; unicode-bidi:embed; background:#eef2f6; padding:1px 5px; border-radius:4px; font-size:.9em;}
+
+  /* ---- clarification: choose a topic --------------------------------------
+     Cards rather than a list, because this is a decision and not a reading
+     task. Each one animates in with a small stagger so the eye lands on them
+     in order; the whole thing collapses to no motion under
+     prefers-reduced-motion, which is the setting a continuously-animating
+     interface most annoys. */
+  .clarify{background:linear-gradient(180deg,var(--blue-soft) 0%,#fff 92%);
+    border:1px solid var(--line); border-radius:14px; padding:20px 22px; margin-top:16px;
+    box-shadow:0 1px 2px rgba(15,42,67,.04), 0 8px 24px -12px rgba(15,42,67,.18);
+    animation:clarifyIn .34s cubic-bezier(.22,.9,.3,1) both;}
+  .clarify h3{font-size:1rem; color:var(--navy); margin:0 0 4px; font-weight:700;}
+  .clarify .sub{font-size:.85rem; color:var(--muted); margin-bottom:14px;}
+  .topics{display:flex; flex-direction:column; gap:9px;}
+  .topic{display:flex; align-items:center; gap:12px; width:100%; text-align:right;
+    background:var(--card); border:1px solid var(--line); border-radius:11px;
+    padding:13px 15px; font:inherit; color:var(--ink); cursor:pointer;
+    position:relative; overflow:hidden;
+    transition:transform .16s cubic-bezier(.22,.9,.3,1), box-shadow .16s ease, border-color .16s ease;
+    animation:topicIn .38s cubic-bezier(.22,.9,.3,1) both;}
+  .topic:nth-child(1){animation-delay:.05s} .topic:nth-child(2){animation-delay:.11s}
+  .topic:nth-child(3){animation-delay:.17s} .topic:nth-child(4){animation-delay:.23s}
+  /* The gold rail slides in on hover: it marks the row without shifting text. */
+  .topic::before{content:""; position:absolute; inset-block:0; inset-inline-start:0; width:3px;
+    background:var(--gold); transform:scaleY(0); transform-origin:center;
+    transition:transform .18s cubic-bezier(.22,.9,.3,1);}
+  .topic:hover{transform:translateY(-2px); border-color:#cfe0f0;
+    box-shadow:0 6px 18px -8px rgba(15,42,67,.28);}
+  .topic:hover::before{transform:scaleY(1);}
+  .topic:focus-visible{outline:2px solid var(--navy2); outline-offset:2px;}
+  .topic:active{transform:translateY(0) scale(.995);}
+  .topic .n{flex:0 0 26px; height:26px; border-radius:50%; display:grid; place-items:center;
+    background:var(--blue-soft); color:var(--navy2); font-size:.8rem; font-weight:700;}
+  .topic .label{flex:1; line-height:1.35;}
+  .topic.none{background:transparent; border-style:dashed; color:var(--muted);}
+  .topic.none .n{background:transparent; border:1px dashed var(--line); color:var(--muted);}
+  .topic.chosen{border-color:var(--gold); box-shadow:0 0 0 3px rgba(201,162,39,.16);}
+  .topic[disabled]{opacity:.45; cursor:default; transform:none; box-shadow:none;}
+  @keyframes clarifyIn{from{opacity:0; transform:translateY(6px)} to{opacity:1; transform:none}}
+  @keyframes topicIn{from{opacity:0; transform:translateY(9px)} to{opacity:1; transform:none}}
+  @media (prefers-reduced-motion:reduce){
+    .clarify,.topic{animation:none}
+    .topic,.topic::before{transition:none}
+    .topic:hover{transform:none}
+  }
+    .warnline{color:var(--amber); font-weight:700;}
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>עוזר הנהלים</h1>
+  <p>שאלה בעברית חופשית ← תשובה עם אסמכתא מתוך הוראות תכ"ם, פרק 7: התקשרויות ורכישות</p>
+</header>
+
+<div class="wrap">
+  <div class="askbox">
+    <div class="collection-row">
+      <label for="collection">מקור המידע:</label>
+      <select id="collection"></select>
+    </div>
+
+    <!-- dir="auto" so a Hebrew question flows RTL and an English (AWS) question
+         flows LTR based on its own first strong character, instead of forcing
+         every question into the page's RTL direction. -->
+    <textarea id="q" dir="auto" placeholder="לדוגמה: מתי מותר להתקשר בפטור ממכרז ומי הגורם המאשר?"></textarea>
+    <div class="row">
+      <button id="send">שאל</button>
+      <span id="status" class="meta"></span>
+    </div>
+    <div class="samples" id="samples"></div>
+  </div>
+
+  <div id="out"></div>
+
+  <div class="notice">
+    המערכת מאתרת ומנסחת מתוך המסמכים שהוזנו לה בלבד — היא אינה ייעוץ מחייב. האסמכתא הקובעת היא המסמך המקורי, לא תשובת המערכת.
+  </div>
+</div>
+
+<script>
+// ---------------------------------------------------------------------------
+// Sample questions, one set per corpus. TAKAM keeps its original five verbatim
+// — the fifth is deliberately outside the corpus, to demo the refusal live.
+// The AWS set mirrors that same pattern (four in-scope, one deliberately
+// irrelevant) so the demo script works the same way regardless of which
+// collection is selected.
+// ---------------------------------------------------------------------------
+const TAKAM_SAMPLES = [
+  "מתי מותר להתקשר בפטור ממכרז ומי הגורם המאשר?",
+  "מתי משתמשים בערבות דיגיטלית ומה ההבדל מערבות רגילה?",
+  "האם מותר לפסול ספק במכרז בגלל עבר פלילי?",
+  "מה אומרות ההוראות על התקשרות לרכישת שירותי בינה מלאכותית?",
+  "מה תקופת האחריות המינימלית על ציוד מחשוב?"
+];
+
+const AWS_SAMPLES = [
+  "מה זה cold start ואיך אפשר להקטין אותו?",
+  "איך נותנים לפונקציה הרשאה לגשת לקבצים באחסון?",
+  "איך עובד חיפוש וקטורי ומתי כדאי להשתמש בו?",
+  "איך מחלצים טבלאות ממסמך סרוק?",
+  'מה שיעור המע"מ בישראל?' // out of scope on purpose — refusal demo
+];
+
+/** Exact refusal text produced by the deterministic gate (MIN_SCORE in config.ts). */
+const REFUSAL_TEXT = "לא מצאתי במסמכים שברשותי.";
+
+/**
+ * The refusal sentence without its full stop, and the test that recognises a
+ * refusal the MODEL wrote rather than the gate.
+ *
+ * Mirrors isRefusalText in src/core/answer.ts — keep the two identical.
+ * Comparing against the exact constant missed every model-written refusal, so
+ * the page rendered "I did not find anything in my documents" as an ordinary
+ * answer, complete with a sources box pointing at an instruction. Measured over
+ * 100 control questions: exact match recognised 87, this recognises 94.
+ */
+const REFUSAL_PREFIX = "לא מצאתי במסמכים שברשותי";
+/**
+ * Kept in sync BY HAND with REFUSAL_LEAD in answer.ts — the same lead has to be
+ * stripped here, or the page renders a sources box beside a refusal. Extended
+ * 10/09/2026 with markdown emphasis after the model wrote
+ * "**לא מצאתי במסמכים שברשותי.**" on a control question and every text-matching
+ * copy of this test scored it as an answer.
+ */
+const REFUSAL_LEAD = /^(?:#{1,6}[^\n]*\n+|[*_]{1,3}|\s)+/;
+function isRefusalText(text) {
+  return String(text || "").trim().replace(REFUSAL_LEAD, "").startsWith(REFUSAL_PREFIX);
+}
+
+// ---------------------------------------------------------------------------
+// Collection state. Starts with a TAKAM-only fallback so the page is usable
+// even if GET /api/collections is unreachable or not yet deployed — today only
+// "takam" actually exists server-side, the AWS collections are built later.
+// The real list, when it loads successfully, REPLACES this array; nothing
+// about the AWS entries is hardcoded beyond this safety-net default.
+// ---------------------------------------------------------------------------
+let collections = [
+  { id: "takam", label: 'הוראות תכ"ם', language: "he", citation: "instruction" }
+];
+let defaultCollection = "takam";
+let currentCollection = "takam";
+
+const q = document.getElementById('q');
+const out = document.getElementById('out');
+const statusEl = document.getElementById('status');
+const sendBtn = document.getElementById('send');
+const collectionSelect = document.getElementById('collection');
+const samplesEl = document.getElementById('samples');
+
+/**
+ * Fetch the live collection list. On any failure (network down, endpoint not
+ * deployed yet, malformed body) we keep the TAKAM-only fallback declared
+ * above and log a warning — the picker still works, just with one option.
+ */
+async function loadCollections() {
+  try {
+    const res = await fetch('/api/collections');
+    if (!res.ok) throw new Error('GET /api/collections returned ' + res.status);
+    const data = await res.json();
+    if (Array.isArray(data.collections) && data.collections.length > 0) {
+      collections = data.collections;
+      defaultCollection = data.default || collections[0].id;
+    }
+  } catch (e) {
+    console.warn('Falling back to TAKAM-only collection list:', e);
+  }
+  currentCollection = defaultCollection;
+  renderCollectionPicker();
+  renderSamples();
+  updatePlaceholder();
+}
+
+/** Build the <select> from whatever `collections` currently holds, grouped by language. */
+function renderCollectionPicker() {
+  const groupOrder = ['he', 'en'];
+  const groupLabels = { he: 'הוראות תכ"ם', en: 'מדריכי AWS' };
+  const byLanguage = { he: [], en: [] };
+
+  for (const c of collections) {
+    (byLanguage[c.language] || byLanguage.en).push(c);
+  }
+
+  collectionSelect.innerHTML = '';
+  for (const key of groupOrder) {
+    const items = byLanguage[key];
+    if (!items || items.length === 0) continue;
+    const optgroup = document.createElement('optgroup');
+    optgroup.label = groupLabels[key];
+    for (const c of items) {
+      const opt = document.createElement('option');
+      opt.value = c.id;
+      opt.textContent = c.label;
+      if (c.id === currentCollection) opt.selected = true;
+      optgroup.appendChild(opt);
+    }
+    collectionSelect.appendChild(optgroup);
+  }
+}
+
+collectionSelect.addEventListener('change', () => {
+  currentCollection = collectionSelect.value;
+  out.innerHTML = '';
+  renderSamples();
+  updatePlaceholder();
+});
+
+/** Sample set follows the SELECTED collection's language, not its specific id
+ *  (the AWS collections all share one sensible sample set — TAKAM has its own). */
+function samplesFor(collectionId) {
+  const def = collections.find(c => c.id === collectionId);
+  return (!def || def.language === 'he') ? TAKAM_SAMPLES : AWS_SAMPLES;
+}
+
+function renderSamples() {
+  samplesEl.innerHTML = '';
+  samplesFor(currentCollection).forEach(s => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    // dir="auto" resolves this button's OWN paragraph direction from its first
+    // strong character, instead of inheriting the page's RTL. Without this,
+    // an English sample button (no explicit dir) gets right-aligned as a
+    // single embedded LTR run inside an RTL box, which visually flips trailing
+    // punctuation/ellipsis to the wrong (left) side — e.g. "…How does S3…"
+    // instead of "How does S3…" and a leading "?" instead of a trailing one.
+    b.dir = 'auto';
+    b.textContent = s.length > 42 ? s.slice(0, 42) + '…' : s;
+    b.title = s;
+    b.onclick = () => { q.value = s; ask(); };
+    samplesEl.appendChild(b);
+  });
+}
+
+function updatePlaceholder() {
+  const def = collections.find(c => c.id === currentCollection);
+  q.placeholder = (def && def.language === 'en')
+    ? 'e.g. What is the maximum execution timeout for a Lambda function?'
+    : 'לדוגמה: מתי מותר להתקשר בפטור ממכרז ומי הגורם המאשר?';
+}
+
+// ---------------------------------------------------------------------------
+// Elapsed-time feedback. A question can take several seconds end-to-end
+// (retrieval + generation), so a live demo shows a running clock instead of a
+// static "loading…" string that can look frozen to an audience.
+// ---------------------------------------------------------------------------
+let timerHandle = null;
+/* The label changes when the first fragment arrives, because the two phases
+   have genuinely different causes: before it, the system is searching the
+   index; after it, the model is writing. Measured 03/09/2026: the search is
+   about a second and the writing is about ten, so a single "searching…" label
+   spends most of its life being wrong. */
+let timerPhase = 'מחפש במסמכים…';
+
+function startTimer() {
+  const start = performance.now();
+  timerPhase = 'מחפש במסמכים…';
+  statusEl.textContent = timerPhase + ' (0.0 שניות)';
+  timerHandle = setInterval(() => {
+    const elapsed = (performance.now() - start) / 1000;
+    statusEl.textContent = timerPhase + ' (' + elapsed.toFixed(1) + ' שניות)';
+  }, 100);
+}
+
+function markWriting() {
+  timerPhase = 'כותב תשובה…';
+}
+
+function stopTimer() {
+  if (timerHandle) { clearInterval(timerHandle); timerHandle = null; }
+  statusEl.textContent = '';
+}
+
+// ---------------------------------------------------------------------------
+// Ask flow
+// ---------------------------------------------------------------------------
+/**
+ * Ask, showing the answer as it is written.
+ *
+ * Why this exists (measured 03/09/2026): a question took 11.6 seconds, of which
+ * 10.5 were the model writing. There is no faster model to move to, so the wait
+ * cannot be removed — but it can stop being a blank screen. The first fragment
+ * now arrives in about 1.3 seconds and the reader watches the answer appear.
+ *
+ * `/api/ask` is still there and still works. If streaming fails for any reason
+ * — an old browser with no ReadableStream, a proxy that buffers, a 405 from a
+ * deployment that has only the blocking route — this falls back to it and the
+ * user sees a slower answer rather than an error. A demo that degrades is worth
+ * more than a demo that is faster and occasionally blank.
+ */
+async function ask() {
+  const question = q.value.trim();
+  if (question.length < 3) return;
+  await run(question);
+}
+
+/**
+ * One request flow, used by the first question AND by a topic choice.
+ *
+ * The second half of a clarification is the same operation as the first — a
+ * question going to the same endpoint — and it deserves the same treatment: the
+ * seconds counter, the "thinking" state, and the answer appearing as it is
+ * written. It had none of those because it was written as a plain fetch, which
+ * meant picking a topic dropped the reader back into a blank screen for the ten
+ * seconds the model spends writing. That is exactly the wait the streaming path
+ * was built to cover.
+ */
+async function run(question, extra = {}) {
+  sendBtn.disabled = true;
+  collectionSelect.disabled = true; // avoid switching corpus mid-request
+  out.innerHTML = '';
+  startTimer();
+
+  try {
+    const streamed = await askStreaming(question, extra);
+    if (!streamed) await askBlocking(question, extra);
+  } catch (e) {
+    out.innerHTML = '<div class="answer error">שגיאת רשת: ' + escapeHtml(String(e)) + '</div>';
+  } finally {
+    sendBtn.disabled = false;
+    collectionSelect.disabled = false;
+    stopTimer();
+  }
+}
+
+/**
+ * Returns true when it handled the request (including handling a server-sent
+ * error), false when streaming is not usable and the caller should fall back.
+ */
+async function askStreaming(question, extra = {}) {
+  if (!window.ReadableStream || !window.TextDecoder) return false;
+
+  const res = await fetch('/api/ask-stream', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ question, collection: currentCollection, ...extra })
+  });
+
+  // A validation error still arrives as JSON with a non-200 status.
+  if (!res.ok || !res.body) {
+    if (res.status === 404 || res.status === 405) return false;  // route absent → fall back
+    let msg = 'שגיאה';
+    try { msg = (await res.json()).error || msg; } catch (_) {}
+    out.innerHTML = '<div class="answer error">' + escapeHtml(msg) + '</div>';
+    return true;
+  }
+
+  const reader = res.body.getReader();
+  const decoder = new TextDecoder('utf-8');
+  let buffer = '';
+  let text = '';        // every character received so far
+  let shown = 0;        // how many of them are on screen
+  let finishing = false;
+  let panel = null;
+  let handled = false;
+
+  /* Something to look at while retrieval runs, before there is any text. */
+  out.innerHTML =
+    '<div class="thinking"><span class="dots"><i></i><i></i><i></i></span>' +
+    '<span>מחפש את הקטעים הרלוונטיים במסמכים…</span></div>';
+
+  /**
+   * Reveal the text at a steady pace instead of in the bursts the network
+   * delivers.
+   *
+   * The stream arrives as a few hundred fragments of wildly uneven size and
+   * timing — several within one frame, then nothing for 200ms. Painting each
+   * one as it lands is technically "live" and reads as a stutter. This keeps a
+   * backlog and drains a slice of it every animation frame, so the text appears
+   * at a human, even rate and the caret never freezes mid-sentence.
+   *
+   * The rate is proportional to the backlog rather than fixed: a fixed rate
+   * either falls behind a fast model and finishes long after the answer did, or
+   * runs dry on a slow one and stutters anyway. Draining ~1/12 of the backlog
+   * per frame settles at roughly the model's own speed without ever being
+   * dependent on knowing it.
+   */
+  const draw = () => {
+    if (!panel) {
+      // Created once, then mutated. See the .answer animation note in the CSS.
+      out.innerHTML = '';
+      panel = document.createElement('div');
+      panel.className = 'answer streaming';
+      out.appendChild(panel);
+    }
+    panel.innerHTML = formatAnswer(text.slice(0, shown));
+  };
+
+  const tick = () => {
+    const backlog = text.length - shown;
+    if (backlog > 0) {
+      // While finishing, drain hard: the answer is complete and the reader
+      // should not wait on an animation for text the server already sent.
+      const step = finishing ? Math.max(30, Math.ceil(backlog / 3)) : Math.max(1, Math.ceil(backlog / 12));
+      shown = Math.min(text.length, shown + step);
+      draw();
+    }
+    if (finishing && shown >= text.length) return;   // stop the loop
+    requestAnimationFrame(tick);
+  };
+
+  /** Resolves once every received character is on screen. */
+  const drained = () => new Promise(resolve => {
+    const check = () => (shown >= text.length ? resolve() : requestAnimationFrame(check));
+    check();
+  });
+
+  for (;;) {
+    const { value, done } = await reader.read();
+    if (done) break;
+    buffer += decoder.decode(value, { stream: true });
+
+    /* SSE frames are separated by a blank line. Anything after the last blank
+       line is a partial frame and stays in the buffer until the rest arrives —
+       splitting on newline alone would truncate a Hebrew answer mid-word. */
+    const frames = buffer.split('\n\n');
+    buffer = frames.pop() ?? '';
+
+    for (const frame of frames) {
+      const evLine = frame.match(/^event: (.+)$/m);
+      const dataLine = frame.match(/^data: ([\s\S]*)$/m);
+      if (!evLine || !dataLine) continue;
+
+      let payload;
+      try { payload = JSON.parse(dataLine[1]); } catch (_) { continue; }
+
+      if (evLine[1] === 'token') {
+        if (!text) { markWriting(); tick(); }  // first fragment: writing has started
+        text += payload;
+      } else if (evLine[1] === 'done') {
+        // Let the animation catch up, then hand over to the real renderer. The
+        // server's `text` is authoritative; the accumulated copy was only ever
+        // for display, so a dropped fragment corrects itself here.
+        finishing = true;
+        if (text) await drained();
+        out.innerHTML = renderAnswer(payload);
+        handled = true;
+      } else if (evLine[1] === 'error') {
+        finishing = true;
+        out.innerHTML = '<div class="answer error">' + escapeHtml(payload.error || 'שגיאה') + '</div>';
+        handled = true;
+      }
+    }
+  }
+
+  /* The stream ended without a `done` frame — a dropped connection. Whatever
+     text arrived is shown rather than discarded, but it is labelled, because an
+     answer cut off mid-sentence must never look like a finished one. */
+  if (!handled) {
+    finishing = true;
+    out.innerHTML = text
+      ? '<div class="answer">' + formatAnswer(text) +
+        '<div class="warn">התשובה נקטעה באמצע — ההעברה מהשרת הופסקה. שאל שוב.</div></div>'
+      : '<div class="answer error">החיבור נסגר לפני שהתקבלה תשובה.</div>';
+  }
+  return true;
+}
+
+/**
+ * The second half of a clarification: the user picked a topic.
+ *
+ * Delegated from the container rather than bound per button, because the cards
+ * are replaced wholesale on every render and per-node listeners would leak.
+ */
+out.addEventListener('click', async (ev) => {
+  const btn = ev.target.closest('.topic');
+  if (!btn || btn.disabled) return;
+  const card = btn.closest('.clarify');
+  if (!card) return;
+
+  const codes = (btn.dataset.codes || '').split(',').filter(Boolean);
+  const label = btn.dataset.label || '';
+  const question = card.dataset.question || '';
+
+  // "אף אחד מאלה" is a refusal the user asked for. Answering it instantly is
+  // both honest and faster; sending it to the model would spend a call and ten
+  // seconds to produce the same sentence.
+  if (!codes.length) {
+    out.innerHTML = '<div class="answer">לא מצאתי במסמכים שברשותי.</div>';
+    return;
+  }
+
+  // Acknowledge the click before the request starts, so the card does not sit
+  // inert while the counter runs.
+  card.querySelectorAll('.topic').forEach(b => { b.disabled = true; });
+  btn.classList.add('chosen');
+
+  await run(question, { topicCodes: codes, topicLabel: label });
+});
+
+/** The original blocking path, unchanged. Kept as the fallback. */
+async function askBlocking(question, extra = {}) {
+  const res = await fetch('/api/ask', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ question, collection: currentCollection, ...extra })
+  });
+  const data = await res.json();
+
+  if (!res.ok) {
+    out.innerHTML = '<div class="answer error">' + escapeHtml(data.error || 'שגיאה') + '</div>';
+    return;
+  }
+  out.innerHTML = renderAnswer(data);
+}
+
+/**
+ * Build the full result markup for a successful Answer response.
+ * Every piece of model-derived / server-derived text (data.text, item.title,
+ * item.code, data.model, data.route) goes through escapeHtml — the answer is
+ * produced by a language model reading documents, and it is rendered as text,
+ * never as markup.
+ */
+/* The model answers in Markdown, so raw output shows literal ** around every
+   heading. This renders a deliberately tiny subset of it.
+
+   ORDER IS THE SAFETY PROPERTY: escapeHtml runs FIRST, so any HTML the model
+   emitted is already inert text by the time these regexes run. They can only
+   introduce the handful of tags written literally below — never a tag that
+   came from the model. Escaping after formatting would undo exactly that, so
+   the sequence here is load-bearing and must not be reordered. */
+function formatAnswer(text) {
+  var safe = escapeHtml(text);
+
+  return safe
+    // '# heading' / '## heading' → a bold block line. Added when the AWS prompt
+    // started producing structured answers and the '#' characters showed up
+    // verbatim on screen. The trailing newline is consumed here so the
+    // newline-to-<br> pass below does not add a blank line after every heading.
+    .replace(/^[ \t]*#{1,6}[ \t]+(.+)\n?/gm, '<span class="h">$1</span>')
+    // **bold** → <strong>. Non-greedy, must not span a blank line, so an
+    // unclosed ** later in the answer cannot bold the rest of the document.
+    .replace(/\*\*([^*\n]+?)\*\*/g, '<strong>$1</strong>')
+    // A leading "* " or "- " bullet becomes a real bullet character; building
+    // <ul>/<li> would mean tracking nesting, and this reads the same.
+    .replace(/^[ \t]*[*-][ \t]+/gm, '• ')
+    .replace(/\n/g, '<br>');
+}
+
+/**
+ * The clarification card.
+ *
+ * Topics are shown by NAME and never by instruction number: a person knows they
+ * meant advance payments, not that they meant 1.4.5. The code travels in a data
+ * attribute so the second request can resolve it, and surfaces only later, as
+ * the citation under a real answer.
+ *
+ * "אף אחד מאלה" is always last and always present. Without it the layer would
+ * be a way to coax an answer out of a corpus that does not cover the question,
+ * which is the one thing this system must not do.
+ */
+function renderClarify(data) {
+  const c = data.clarify;
+  const rows = c.topics.map((t, i) =>
+    '<button class="topic" data-codes="' + escapeHtml(t.codes.join(',')) + '"' +
+    ' data-label="' + escapeHtml(t.label) + '">' +
+      '<span class="n">' + (i + 1) + '</span>' +
+      '<span class="label">' + escapeHtml(t.label) + '</span>' +
+    '</button>').join('');
+  const none = '<button class="topic none" data-codes="" data-label="' + escapeHtml(c.noneLabel) + '">' +
+      '<span class="n">&times;</span><span class="label">' + escapeHtml(c.noneLabel) + '</span></button>';
+  return '<div class="clarify" data-question="' + escapeHtml(c.question) + '">' +
+    '<h3>' + escapeHtml(data.text) + '</h3>' +
+    '<div class="sub">בחר נושא ואענה ממנו בלבד</div>' +
+    '<div class="topics">' + rows + none + '</div></div>';
+}
+
+function renderAnswer(data) {
+  if (data && data.clarify && Array.isArray(data.clarify.topics) && data.clarify.topics.length) {
+    return renderClarify(data);
+  }
+  /* The server decides once (Answer.refused, set in answer.ts) and the page
+     reads the decision. The text test is only a fallback for a server or Lambda
+     deployed before the field existed — it is no longer the source of truth,
+     so it can no longer drift from the one that is. */
+  const isRefusal = typeof data.refused === 'boolean' ? data.refused : isRefusalText(data.text);
+  const hasSources = Array.isArray(data.sources) && data.sources.length > 0;
+  const kind = citationKindFor(data.collection);
+  let html = '';
+
+  if (isRefusal && hasSources) {
+    /* A refusal that still carries sources can only come from
+       REFUSAL_KEEPS_QUOTED_SOURCES: the model opened with "I did not find it"
+       and then quoted the rule that answers the question (measured 11/09 on
+       g-190: "מכרז מסגרת ייערך אך ורק כמכרז פומבי"). The refusal panel would put
+       "no answer found" beside a sources box — the contradiction the 08/09 fix
+       removed. So it renders as what it is: a quoted rule, formatted like an
+       answer, under a header that says no explicit answer was found.
+       The wording claims no more than that, on purpose: on control c-001 (income
+       tax for an employee, out of scope) the model refused correctly and quoted
+       a grants notice it had REJECTED, and that quote survives the flag too. So
+       the header may not say "this is the rule that answers you". */
+    html +=
+      '<div class="partial">' +
+        '<h3>לא נמצאה תשובה מפורשת במסמכים</h3>' +
+        '<p>התשובה מצטטת הוראה קרובה לנושא. ייתכן שהיא עונה על השאלה וייתכן שרק נוגעת בה — כדאי לקרוא את הציטוט לפני הסתמכות.</p>' +
+      '</div>' +
+      '<div class="answer">' + formatAnswer(data.text) + '</div>';
+  } else if (isRefusal) {
+    // Intentional, calibrated "I don't know" — the point of the retrieval
+    // threshold (MIN_SCORE), not an error condition. Framed as a feature.
+    html +=
+      '<div class="refusal">' +
+        '<h3>לא נמצא מענה במאגר המסמכים</h3>' +
+        '<p>' + escapeHtml(data.text) + '</p>' +
+        '<p class="refusal-note">זו התנהגות מכוונת: המערכת מעדיפה לומר "אינני יודעת" על פני ניחוש שעלול להטעות. ' +
+        'אם נבדקו קטעים בכל זאת, הם מוצגים למטה תחת "מה המערכת קראה".</p>' +
+      '</div>';
+  } else {
+    html += '<div class="answer">' + formatAnswer(data.text) + '</div>';
+  }
+
+  /* The model hit the output-length cap and stopped mid-answer. Shown in the
+     same style as the transport-interruption warning: a cut-off answer must
+     never look like a finished one. */
+  if (data.truncated) {
+    html += '<div class="warn">התשובה ארוכה מהמכסה ונקטעה לפני הסוף. ' +
+      'כדאי לשאול שאלה ממוקדת יותר, או לפתוח את ההוראה המקורית.</div>';
+  }
+
+  /* Citations that match no retrieved passage.
+     This exists because of a real failure caught in testing: the model refused
+     to invent a fact, then attached the wrong instruction number to a true one.
+     The warning is shown instead of the bad citation being quietly stripped —
+     editing the model's output would hide exactly what the reader needs to see,
+     and a wrong instruction number is the first thing someone who knows the
+     regulations will catch. Normally this block never renders. */
+  if (Array.isArray(data.unverified) && data.unverified.length > 0) {
+    const list = data.unverified.map(escapeHtml).join(', ');
+    html +=
+      '<div class="unverified">' +
+        '<h3>⚠ ציטוט שלא אומת</h3>' +
+        '<p>התשובה מפנה ל־<code>' + list + '</code>, שאינם מופיעים באף קטע שאותר. ' +
+        'יש לאמת ידנית מול ההוראה המקורית לפני הסתמכות.</p>' +
+      '</div>';
+  }
+
+  // Only instructions/pages actually cited in the answer text.
+  if (hasSources) {
+    const items = data.sources.map(s => renderSourceItem(s, kind)).join('');
+    // On a refusal that quotes, the box lists what was quoted — not a claimed basis.
+    const heading = isRefusal ? 'ההוראה שצוטטה' : 'מקורות שצוטטו';
+    html += '<div class="sources"><h3>' + heading + '</h3><ul>' + items + '</ul></div>';
+  }
+
+  // Everything the retrieval step considered, whether cited or not — the
+  // "show your work" panel. Collapsed by default so it reads as a deliberate
+  // disclosure, not as leftover debug output.
+  if (Array.isArray(data.retrieved) && data.retrieved.length > 0) {
+    const items = data.retrieved.map(r => renderSourceItem(r, kind)).join('');
+    html +=
+      '<details class="retrieved">' +
+        '<summary>מה המערכת קראה (' + data.retrieved.length + ' קטעים שנבדקו)</summary>' +
+        '<ul>' + items + '</ul>' +
+      '</details>';
+  }
+
+  html +=
+    '<div class="meta">מודל: <code>' + escapeHtml(data.model) + '</code> · ' +
+    /* How much of the corpus this answer actually searched. Shown on every
+       answer, because a search that quietly covered less than the whole corpus
+       is the defect that made this assistant look broken for weeks: it searched
+       18 instructions out of 411 and said "I did not find it" in an ordinary
+       voice. A reader cannot infer coverage from an answer, so it is stated. */
+    (data.coverage
+      ? (data.coverage.missing && data.coverage.missing.length
+          ? '<span class="warnline">נסרקו ' + data.coverage.searched + ' מתוך ' +
+            data.coverage.declared + ' אוספים — ' + escapeHtml(data.coverage.missing.join(', ')) +
+            ' ללא אינדקס</span> · '
+          : 'נסרקו כל ' + data.coverage.declared + ' האוספים · ')
+      : '') +
+    'מסלול: <code>' + escapeHtml(data.route) + '</code> · ' +
+    'מאגר המסמכים נכון ל-' + new Date(data.indexedAt).toLocaleDateString('he-IL') + ' · ' +
+    data.usage.inputTokens + ' טוקני קלט / ' + data.usage.outputTokens + ' פלט · ' +
+    'עלות השאלה: $' + data.usage.costUSD.toFixed(5) + '</div>';
+
+  return html;
+}
+
+/** TAKAM cites an instruction number; AWS pages cite a doc slug — label accordingly. */
+function citationKindFor(collectionId) {
+  const def = collections.find(c => c.id === collectionId);
+  if (def) return def.citation;
+  return collectionId && collectionId.startsWith('aws-') ? 'page' : 'instruction';
+}
+
+/**
+ * What to call a cited source.
+ *
+ * The TAKAM corpus is no longer instructions only — it holds forms, ministry
+ * messages, tender notices and annexes too. Labelling every one of them
+ * "הוראה", as this did, tells the reader that a blank form is binding policy.
+ * The server sends the ministry's own document type; "הוראה" remains the
+ * fallback for a source recorded before the type existed.
+ */
+const TAKAM_KIND_LABEL = {
+  Instruction: 'הוראה',
+  Form: 'טופס',
+  Message: 'הודעה',
+  'Tender Notice': 'הודעת מכרז',
+  'Tender Details': 'פרטי מכרז',
+  'Tender Maintenance': 'עדכון מכרז',
+  'Attached File': 'נספח',
+};
+
+function renderSourceItem(item, kind) {
+  const label = kind === 'page'
+    ? 'עמוד'
+    : (TAKAM_KIND_LABEL[item.doctype] || 'הוראה');
+  const codeHtml = '<code>' + escapeHtml(item.code) + '</code>';
+  // Only ever link http(s) URLs coming back from the server — never trust a
+  // model/API-derived string as a href without a scheme check.
+  const codeOrLink = (item.sourceUrl && isSafeUrl(item.sourceUrl))
+    ? '<a href="' + escapeHtml(item.sourceUrl) + '" target="_blank" rel="noopener noreferrer">' + codeHtml + '</a>'
+    : codeHtml;
+  return '<li>' + label + ' ' + codeOrLink + ' — ' + escapeHtml(item.title) +
+    ' <span class="meta">(קרבה ' + item.score.toFixed(3) + ')</span></li>';
+}
+
+function isSafeUrl(url) {
+  return typeof url === 'string' && /^https?:\/\//i.test(url);
+}
+
+// The answer comes from a language model reading government/service documents;
+// render it as text, never as markup.
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c =>
+    ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
+sendBtn.onclick = ask;
+q.addEventListener('keydown', e => { if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) ask(); });
+
+loadCollections();
+</script>
+</body>
+</html>

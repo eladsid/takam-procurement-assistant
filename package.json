@@ -1,0 +1,28 @@
+{
+  "name": "takam-procurement-assistant",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "עוזר הנהלים — RAG בעברית על הוראות תכ\"ם פרק 7 (התקשרויות ורכישות), על AWS Bedrock",
+  "scripts": {
+    "serve": "tsx src/local/server.ts",
+    "ask": "tsx src/local/ask-cli.ts",
+    "retrieve": "tsx src/local/retrieve-cli.ts",
+    "ingest": "tsx src/local/ingest-cli.ts --collection=takam",
+    "eval": "tsx src/eval/run-eval.ts --gold=eval/scenarios.json --controls=eval/controls.json --concurrency=1",
+    "eval:why-wrong": "tsx src/eval/why-wrong.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@aws-sdk/client-bedrock-runtime": "^3.700.0",
+    "@aws-sdk/client-s3": "^3.700.0",
+    "jszip": "^3.10.1",
+    "mammoth": "^1.8.0",
+    "pdf-parse": "^2.4.5"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.7.0"
+  }
+}
